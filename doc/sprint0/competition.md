@@ -1,7 +1,5 @@
 # Competition Analysis  
 
-**Estimated Read Time:** 2-5 minutes  
-
 ---
 
 ## Existing Products  
