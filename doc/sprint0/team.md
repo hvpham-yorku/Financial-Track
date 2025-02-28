@@ -2,7 +2,7 @@
 |  
 |----------------|--------|------------|---------------------|---------------------|------------------  
 |  
-|KwangminRyu     |N       |217233321   |danielry@my.yorku.ca |rkm9864@gmail.com    |sandwitche  
+|KwangminRyu     |N &nbsp;&nbsp;|217233321   |danielry@my.yorku.ca |rkm9864@gmail.com    |sandwitche  
 |  
 |Jay Patel       |N       |217548207   |jaym2001@my.yorku.ca |jaym2001@my.yorku.ca |Jay  
 |  
