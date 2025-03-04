@@ -8,4 +8,4 @@
 
 ---
 
-**Discord Chat/Server Invite:** [Link](https://discord.gg/P5Kf3E2h)
+**Discord Chat/Server Invite:** [Link](https://discord.gg/97SjCgA2)
