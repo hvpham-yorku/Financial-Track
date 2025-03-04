@@ -39,6 +39,10 @@ Some key features of our application:
 - Expense Categorization
 - Financial Reporting
 
+## Motivation and Project Description
+
+Managing personal finances can be overwhelming, especially for individuals with multiple income sources or fluctuating expenses. The Financial Track application aims to simplify financial tracking by providing a user-friendly platform for logging transactions, setting budgets, and analyzing financial habits. Our goal is to empower users to make informed financial decisions and improve their financial stability.
+
 ## Contact
 
 For any questions regarding this sprint's documentation, please contact the team through the course's official channels or use any email of our [team](#team-members).
