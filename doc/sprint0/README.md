@@ -43,6 +43,87 @@ Some key features of our application:
 
 Managing personal finances can be overwhelming, especially for individuals with multiple income sources or fluctuating expenses. The Financial Track application aims to simplify financial tracking by providing a user-friendly platform for logging transactions, setting budgets, and analyzing financial habits. Our goal is to empower users to make informed financial decisions and improve their financial stability.
 
+## Installation
+
+Please ensure you have the following installed:
+- [Node.js](https://nodejs.org) - Download and install
+- [Git](https://git-scm.com/) - Download and install
+
+To set up the project locally, follow these steps:
+
+1. **Clone the repository:**
+  
+```bash
+   git clone https://github.com/hvpham-yorku/project-financial_trak-group-10.git
+   cd project-financial_trak-group-10
+```
+
+2. **Install dependencies:**
+  
+```bash
+   npm install
+```
+
+3. **Run the Application**
+
+   - For production mode, run:
+
+     ```bash
+     npm run start
+     ```
+   - For development mode, run:
+
+     ```bash
+     npm run dev
+     ```
+
+The application should now be accessible at http://localhost:4200/.
+
+## Contribution to the Project
+
+We welcome contributions to the Financial Track project! If you'd like to contribute, please follow these steps:
+
+### 1. Fork the Repository
+
+Start by forking the repository to your GitHub account. This allows you to make changes without affecting the original project.
+
+```bash
+git clone https://github.com/your-username/project-financial_trak-group-10.git
+cd project-financial_trak-group-10
+```
+
+### 2. Create a Branch for Your Work
+
+Create a new branch for the feature or bug fix you're working on. Use a descriptive name for the branch to help identify the purpose of your changes.
+
+```bash
+git checkout -b your-feature-branch
+```
+### 3. Make Changes and Commit
+
+Work on your changes locally and make sure they follow the project’s coding standards. After making your changes, stage and commit them with a clear, concise commit message.
+
+```bash
+git add .
+git commit -m "Brief description of the changes made"
+```
+### 4. Push Your Changes
+
+Push your branch to your forked repository on GitHub.
+
+```bash
+git push origin your-feature-branch
+```
+### 5. Open a Pull Request
+
+Once your changes are pushed, navigate to the original repository and open a pull request. Ensure that your pull request provides a clear description of what you’ve done and any relevant information.
+
+**Guidelines for Pull Requests:**
+
+- Ensure your code passes any existing tests or write new tests if applicable.
+- Follow the project's code style and naming conventions.
+- Provide a detailed explanation of what the pull request does, including any relevant issues it addresses.
+
 ## Contact
 
 For any questions regarding this sprint's documentation, please contact the team through the course's official channels or use any email of our [team](#team-members).
