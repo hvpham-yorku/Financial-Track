@@ -46,20 +46,23 @@ Managing personal finances can be overwhelming, especially for individuals with 
 ## Installation
 
 Please ensure you have the following installed:
+
 - [Node.js](https://nodejs.org) - Download and install
 - [Git](https://git-scm.com/) - Download and install
+
+### Client
 
 To set up the project locally, follow these steps:
 
 1. **Clone the repository:**
-  
+
 ```bash
    git clone https://github.com/hvpham-yorku/project-financial_trak-group-10.git
    cd project-financial_trak-group-10
 ```
 
 2. **Install dependencies:**
-  
+
 ```bash
    npm install
 ```
@@ -71,6 +74,7 @@ To set up the project locally, follow these steps:
      ```bash
      npm run start
      ```
+
    - For development mode, run:
 
      ```bash
@@ -78,6 +82,34 @@ To set up the project locally, follow these steps:
      ```
 
 The application should now be accessible at http://localhost:4200/.
+
+### Server
+
+To run the server locally, follow these steps:
+
+1. **Clone the repository:**
+
+```bash
+   git clone https://github.com/hvpham-yorku/project-financial_trak-group-10.git
+   cd project-financial_trak-group-10
+```
+
+2. **Install dependencies:**
+
+```bash
+   cd FinancialTrack
+   cd server
+   npm install
+```
+
+3. **Run the Application**
+
+```bash
+   npm run db-seed # Add mock data to the database
+   npm run dev
+```
+
+The application should now be accessible at http://localhost:3000/.
 
 ## Contribution to the Project
 
@@ -99,6 +131,7 @@ Create a new branch for the feature or bug fix you're working on. Use a descript
 ```bash
 git checkout -b your-feature-branch
 ```
+
 ### 3. Make Changes and Commit
 
 Work on your changes locally and make sure they follow the project’s coding standards. After making your changes, stage and commit them with a clear, concise commit message.
@@ -107,6 +140,7 @@ Work on your changes locally and make sure they follow the project’s coding st
 git add .
 git commit -m "Brief description of the changes made"
 ```
+
 ### 4. Push Your Changes
 
 Push your branch to your forked repository on GitHub.
@@ -114,6 +148,7 @@ Push your branch to your forked repository on GitHub.
 ```bash
 git push origin your-feature-branch
 ```
+
 ### 5. Open a Pull Request
 
 Once your changes are pushed, navigate to the original repository and open a pull request. Ensure that your pull request provides a clear description of what you’ve done and any relevant information.
