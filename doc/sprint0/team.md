@@ -9,3 +9,4 @@
 ---
 
 **Discord Chat/Server Invite:** [Link](https://discord.gg/97SjCgA2)
+**Trello Invite:** [Link](https://trello.com/invite/67ae7b89b9076cab64b52a8a/ATTIc3a87d0079a205c64fe8c364f37c9b238A1FE383)
