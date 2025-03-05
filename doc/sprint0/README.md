@@ -57,7 +57,7 @@ To set up the project locally, follow these steps:
 1. **Clone the repository:**
 
 ```bash
-   git clone https://github.com/hvpham-yorku/project-financial_trak-group-10.git
+   git clone https://github.com/hvpham-yorku/Financial-Track.git
    cd project-financial_trak-group-10
 ```
 
@@ -90,7 +90,7 @@ To run the server locally, follow these steps:
 1. **Clone the repository:**
 
 ```bash
-   git clone https://github.com/hvpham-yorku/project-financial_trak-group-10.git
+   git clone https://github.com/hvpham-yorku/Financial-Track.git
    cd project-financial_trak-group-10
 ```
 
