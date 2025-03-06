@@ -61,7 +61,7 @@ _To set up the project locally, follow these steps:_
 
 ```bash
    git clone https://github.com/hvpham-yorku/Financial-Track.git
-   cd project-financial_trak-group-10
+   cd Financial-Track
 ```
 
 ### Client
@@ -110,8 +110,8 @@ We welcome contributions to the Financial Track project! If you'd like to contri
 Start by forking the repository to your GitHub account. This allows you to make changes without affecting the original project.
 
 ```bash
-git clone https://github.com/your-username/project-financial_trak-group-10.git
-cd project-financial_trak-group-10
+git clone https://github.com/your-username/Financial-Track.git
+cd Financial-Track
 ```
 
 ### 2. Create a Branch for Your Work
