@@ -49,50 +49,40 @@ Please ensure you have the following installed:
 
 - [Node.js](https://nodejs.org) - Download and install
 - [Git](https://git-scm.com/) - Download and install
+- [Angular CLI](https://angular.dev/tools/cli/setup-local)
 
-### Client
+```
+npm install -g @angular/cli
+```
 
-To set up the project locally, follow these steps:
+_To set up the project locally, follow these steps:_
 
-1. **Clone the repository:**
+1. Clone the repository
 
 ```bash
    git clone https://github.com/hvpham-yorku/Financial-Track.git
    cd project-financial_trak-group-10
 ```
 
+### Client
+
 2. **Install dependencies:**
 
 ```bash
+   cd FinancialTrack
+   cd client
    npm install
 ```
 
 3. **Run the Application**
 
-   - For production mode, run:
-
-     ```bash
-     npm run start
-     ```
-
-   - For development mode, run:
-
-     ```bash
-     npm run dev
-     ```
+```bash
+   ng serve
+```
 
 The application should now be accessible at http://localhost:4200/.
 
 ### Server
-
-To run the server locally, follow these steps:
-
-1. **Clone the repository:**
-
-```bash
-   git clone https://github.com/hvpham-yorku/Financial-Track.git
-   cd project-financial_trak-group-10
-```
 
 2. **Install dependencies:**
 
