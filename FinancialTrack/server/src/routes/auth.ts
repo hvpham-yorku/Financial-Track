@@ -7,14 +7,7 @@ import jwt from "jsonwebtoken";
 const AuthRoute = Router();
 
 AuthRoute.get("/", async (_, res: Response) => {
-  const users = await User.findAll();
-  res.json(users);
-});
-
-AuthRoute.post("/", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const user = await User.create({ username, password });
-  res.json(user);
+  res.status(404).json({ data: null, error: "Page Not Found" });
 });
 
 AuthRoute.post("/register", async (req: Request, res: Response) => {
