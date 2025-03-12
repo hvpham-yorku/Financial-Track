@@ -9,7 +9,6 @@ export default class User extends Model {
 
 User.init(
   {
-    // Model attributes are defined here
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -18,6 +17,7 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -25,10 +25,11 @@ User.init(
     },
   },
   {
-    // Other model options go here
     sequelize: db,
     modelName: "User",
   }
 );
 
-User.sync();
+(async () => {
+  await User.sync();
+})();
