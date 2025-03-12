@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import { Config } from "./config";
-import User from "./models/User";
 import cors from "cors";
 import AuthRoute from "./routes/auth";
 import TransactionsRoute from "./routes/transactions";
