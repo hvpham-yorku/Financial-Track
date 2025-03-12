@@ -12,6 +12,13 @@ export default class Transaction extends Model {
   declare updatedAt: Date;
   declare userId: number;
 
+  public static getTransaction(
+    userId: number,
+    tId: number
+  ): Promise<Transaction | null> {
+    return Transaction.findOne({ where: { userId, id: tId } });
+  }
+
   public static getTransactions(
     userId: number,
     type?: "income" | "expense"
@@ -19,6 +26,22 @@ export default class Transaction extends Model {
     return !type
       ? Transaction.findAll({ where: { userId } })
       : Transaction.findAll({ where: { userId, type } });
+  }
+
+  public static async getTags(userId: number): Promise<string[]> {
+    return Transaction.findAll({
+      where: {
+        userId,
+      },
+    }).then((transactions) =>
+      Array.from(
+        new Set(
+          transactions
+            .map((t) => t.getDataValue("tag"))
+            .filter((tag): tag is string => tag !== null)
+        )
+      )
+    );
   }
 }
 
@@ -64,3 +87,20 @@ Transaction.init(
 (async () => {
   await Transaction.sync();
 })();
+
+export type TransactionInsertBody = {
+  amount: number;
+  title: string;
+  tag?: string | null;
+  type: "income" | "expense";
+  createdAt?: Date;
+};
+
+export type TransactionEditBody = {
+  id: number;
+  amount?: number;
+  title?: string;
+  tag?: string | null;
+  type?: "income" | "expense";
+  createdAt?: Date;
+};

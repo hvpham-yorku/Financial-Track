@@ -1,7 +1,10 @@
 import { NextFunction, Router } from "express";
 import { Request, Response } from "express";
 import User from "../models/User";
-import Transaction from "../models/Transaction";
+import Transaction, {
+  TransactionEditBody,
+  TransactionInsertBody,
+} from "../models/Transaction";
 import { validateUser } from "../middleware";
 import { UserAuthInfoRequest } from "../types";
 
@@ -17,6 +20,7 @@ const TransactionsRoute = Router();
 
 TransactionsRoute.use(validateUser);
 
+// GET ROUTES
 TransactionsRoute.get("/", async (_, res: Response) => {
   res.status(404).json({ data: null, error: "Page Not Found" });
 });
@@ -102,6 +106,91 @@ TransactionsRoute.get("/income", async (req: Request, res: Response) => {
     // Get the transactions
     const incomes = await Transaction.getTransactions(user.id, "income");
     res.json({ data: incomes, error: null });
+  } catch (error) {
+    res.status(500).json({ data: null, error: "Internal server error" });
+  }
+});
+
+TransactionsRoute.get("/tags", async (req: Request, res: Response) => {
+  try {
+    const userId = req.user.id as number;
+    // Check if exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      res.status(404).json({ data: null, error: "User not found" });
+      return;
+    }
+
+    // Get the transactions
+    const tags = await Transaction.getTags(user.id);
+    res.json({ data: tags, error: null });
+  } catch (error) {
+    res.status(500).json({ data: null, error: "Internal server error" });
+  }
+});
+
+// POST ROUTES
+TransactionsRoute.post("/add", async (req: Request, res: Response) => {
+  try {
+    const userId = req.user.id as number;
+    const payload = req.body as TransactionInsertBody;
+    // Check if exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      res.status(404).json({ data: null, error: "User not found" });
+      return;
+    }
+
+    const t = Transaction.create({ ...payload, userId });
+    res.status(200).json({ data: t, error: null });
+  } catch (error) {
+    res.status(500).json({ data: null, error: "Internal server error" });
+  }
+});
+
+// PATCH ROUTES
+TransactionsRoute.patch("/edit", async (req: Request, res: Response) => {
+  try {
+    const userId = req.user.id as number;
+    const payload = req.body as TransactionEditBody;
+    // Check if exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      res.status(404).json({ data: null, error: "User not found" });
+      return;
+    }
+
+    const t = Transaction.update(
+      { ...payload, updated_at: new Date() },
+      { where: { id: payload.id, userId } }
+    );
+    res.status(200).json({ data: t, error: null });
+  } catch (error) {
+    res.status(500).json({ data: null, error: "Internal server error" });
+  }
+});
+
+// DELETE ROUTES
+TransactionsRoute.delete("/delete", async (req: Request, res: Response) => {
+  try {
+    const userId = req.user.id as number;
+    const payload = req.body as TransactionEditBody;
+    // Check if exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      res.status(404).json({ data: null, error: "User not found" });
+      return;
+    }
+
+    const transaction = await Transaction.getTransaction(user.id, payload.id);
+    if (!transaction) {
+      res.status(404).json({ error: "Transaction not found" });
+      return;
+    }
+
+    // Delete the transaction
+    await transaction.destroy();
+    res.status(200).json({ error: null });
   } catch (error) {
     res.status(500).json({ data: null, error: "Internal server error" });
   }
