@@ -5,6 +5,7 @@ export default class User extends Model {
   declare id: number;
   declare username: string;
   declare password: string;
+  declare budget: number;
 }
 
 User.init(
@@ -22,6 +23,11 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    budget: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      defaultValue: 0.0,
     },
   },
   {

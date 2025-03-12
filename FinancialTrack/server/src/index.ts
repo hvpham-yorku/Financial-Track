@@ -5,6 +5,7 @@ import User from "./models/User";
 import cors from "cors";
 import AuthRoute from "./routes/auth";
 import TransactionsRoute from "./routes/transactions";
+import UserRoute from "./routes/users";
 
 const app: Express = express();
 app.use(cors());
@@ -15,7 +16,8 @@ app.get("/", async (_, res: Response) => {
   res.send("Financial Track Server");
 });
 
-app.use("/users", AuthRoute);
+app.use("/users", UserRoute);
+app.use("/auth", AuthRoute);
 app.use("/transactions", TransactionsRoute);
 
 app.listen(Config.PORT, () => {
