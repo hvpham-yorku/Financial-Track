@@ -5,3 +5,23 @@ div.demo{
 .demoInput{
     margin: 1rem;
 }
+
+.main {
+    display: flex;                  
+    justify-content: center;        
+    height: 100vh;                  
+    width: 100%;                   
+}
+
+.tabs-container, .transactions {
+    margin: 1rem;                 
+}
+
+.tabs-container {                 
+    display: flex;
+    justify-content: center;        
+}
+
+.transactions {                     
+    display: flex;       
+}
