@@ -33,7 +33,7 @@ TransactionsRoute.get(
       // Check if user exists
       const user = await User.findByPk(userId);
       if (!user) {
-        res.status(404).json({ data: null, error: "User not found" });
+        res.status(404).json({ data: [], error: "User not found" });
         return;
       }
 
@@ -41,7 +41,7 @@ TransactionsRoute.get(
       const transactions = await Transaction.getTransactions(user.id);
       res.status(201).json({ data: transactions, error: null });
     } catch (error) {
-      res.status(500).json({ data: null, error: "Internal server error" });
+      res.status(500).json({ data: [], error: "Internal server error" });
     }
   }
 );
@@ -52,7 +52,9 @@ TransactionsRoute.get("/all-split", async (req: Request, res: Response) => {
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {
-      res.status(404).json({ data: null, error: "User not found" });
+      res
+        .status(404)
+        .json({ data: { income: [], expense: [] }, error: "User not found" });
       return;
     }
     // Get the transactions
@@ -71,7 +73,10 @@ TransactionsRoute.get("/all-split", async (req: Request, res: Response) => {
 
     res.json({ data: split, error: null });
   } catch (error) {
-    res.status(500).json({ data: null, error: "Internal server error" });
+    res.status(500).json({
+      data: { income: [], expense: [] },
+      error: "Internal server error",
+    });
   }
 });
 
@@ -81,7 +86,7 @@ TransactionsRoute.get("/expense", async (req: Request, res: Response) => {
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {
-      res.status(404).json({ data: null, error: "User not found" });
+      res.status(404).json({ data: [], error: "User not found" });
       return;
     }
 
@@ -89,7 +94,7 @@ TransactionsRoute.get("/expense", async (req: Request, res: Response) => {
     const expenses = await Transaction.getTransactions(user.id, "expense");
     res.json({ data: expenses, error: null });
   } catch (error) {
-    res.status(500).json({ data: null, error: "Internal server error" });
+    res.status(500).json({ data: [], error: "Internal server error" });
   }
 });
 
@@ -99,7 +104,7 @@ TransactionsRoute.get("/income", async (req: Request, res: Response) => {
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {
-      res.status(404).json({ data: null, error: "User not found" });
+      res.status(404).json({ data: [], error: "User not found" });
       return;
     }
 
@@ -107,7 +112,7 @@ TransactionsRoute.get("/income", async (req: Request, res: Response) => {
     const incomes = await Transaction.getTransactions(user.id, "income");
     res.json({ data: incomes, error: null });
   } catch (error) {
-    res.status(500).json({ data: null, error: "Internal server error" });
+    res.status(500).json({ data: [], error: "Internal server error" });
   }
 });
 
@@ -117,7 +122,7 @@ TransactionsRoute.get("/tags", async (req: Request, res: Response) => {
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {
-      res.status(404).json({ data: null, error: "User not found" });
+      res.status(404).json({ data: [], error: "User not found" });
       return;
     }
 
@@ -125,7 +130,7 @@ TransactionsRoute.get("/tags", async (req: Request, res: Response) => {
     const tags = await Transaction.getTags(user.id);
     res.json({ data: tags, error: null });
   } catch (error) {
-    res.status(500).json({ data: null, error: "Internal server error" });
+    res.status(500).json({ data: [], error: "Internal server error" });
   }
 });
 
@@ -141,7 +146,7 @@ TransactionsRoute.post("/add", async (req: Request, res: Response) => {
       return;
     }
 
-    const t = Transaction.create({ ...payload, userId });
+    const t = await Transaction.create({ ...payload, userId });
     res.status(200).json({ data: t, error: null });
   } catch (error) {
     res.status(500).json({ data: null, error: "Internal server error" });
@@ -156,17 +161,17 @@ TransactionsRoute.patch("/edit", async (req: Request, res: Response) => {
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {
-      res.status(404).json({ data: null, error: "User not found" });
+      res.status(404).json({ error: "User not found" });
       return;
     }
 
-    const t = Transaction.update(
+    await Transaction.update(
       { ...payload, updated_at: new Date() },
       { where: { id: payload.id, userId } }
     );
-    res.status(200).json({ data: t, error: null });
+    res.status(200).json({ error: null });
   } catch (error) {
-    res.status(500).json({ data: null, error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -178,7 +183,7 @@ TransactionsRoute.delete("/delete", async (req: Request, res: Response) => {
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {
-      res.status(404).json({ data: null, error: "User not found" });
+      res.status(404).json({ error: "User not found" });
       return;
     }
 
@@ -192,7 +197,7 @@ TransactionsRoute.delete("/delete", async (req: Request, res: Response) => {
     await transaction.destroy();
     res.status(200).json({ error: null });
   } catch (error) {
-    res.status(500).json({ data: null, error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

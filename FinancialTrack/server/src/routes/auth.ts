@@ -17,7 +17,7 @@ AuthRoute.post("/register", async (req: Request, res: Response) => {
       where: { username: req.body.username },
     });
     if (existingUser) {
-      res.status(400).json({ error: "Username already exists" });
+      res.status(400).json({ data: null, error: "Username already exists" });
       return;
     }
 
@@ -30,9 +30,9 @@ AuthRoute.post("/register", async (req: Request, res: Response) => {
       Config.SECRET,
       { expiresIn: "7d" }
     );
-    res.status(201).json({ message: "User registered successfully", token });
+    res.status(201).json({ data: token, error: null });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ data: null, error: "Internal server error" });
   }
 });
 
@@ -41,11 +41,11 @@ AuthRoute.post("/login", async (req: Request, res: Response) => {
     // Check if the email exists
     const user = await User.findOne({ where: { username: req.body.username } });
     if (!user) {
-      res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ data: null, error: "Invalid credentials" });
       return;
     }
     if (user.password !== req.body.password) {
-      res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ data: null, error: "Invalid credentials" });
       return;
     }
 
@@ -55,9 +55,9 @@ AuthRoute.post("/login", async (req: Request, res: Response) => {
       Config.SECRET,
       { expiresIn: "7d" }
     );
-    res.status(200).json({ message: "User logged in successfully", token });
+    res.status(200).json({ data: token, error: null });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ data: null, error: "Internal server error" });
   }
 });
 
