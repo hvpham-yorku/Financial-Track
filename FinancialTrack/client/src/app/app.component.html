@@ -1,6 +1,24 @@
-<div class="demo">
-  <h1>Hey! Welcome to FinancialTrack Application.</h1>
-  <input class="demoInput" type="text" [(ngModel)]="username" placeholder="Username">
-  <input class="demoInput" type="password" [(ngModel)]="password" placeholder="Password">
-  <button (click)="addUser()">Add User</button>
+<div class="main">
+    <div class="tabs-container">
+        <p-tabs value="0">
+            <p-tablist>
+                <p-tab value="0">Monthly</p-tab>
+                <p-tab value="1">Weekly</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <p-datepicker class="max-w-full" [(ngModel)]="monthlyDate" [inline]="true" [showWeek]="true"/>
+                </p-tabpanel>
+                <p-tabpanel value="1">
+                    <p-datepicker class="max-w-full" [(ngModel)]="weeklyDate" [inline]="true" [showWeek]="true"/>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+    <div class="transactions">
+        <p-floatlabel variant="in">
+            <p-datepicker [(ngModel)]="monthlyDate" inputId="in_label" showIcon iconDisplay="input" [disabled]="true"/>
+            <label for="in_label">Date</label>
+        </p-floatlabel>
+    </div>
 </div>
