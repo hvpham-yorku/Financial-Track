@@ -8,29 +8,32 @@ import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
 import { DatePicker, DatePickerModule } from 'primeng/datepicker';
 import { FloatLabel } from 'primeng/floatlabel';
+import { AuthComponent } from './components/auth/auth.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  imports: [HttpClientModule, FormsModule, ButtonModule, TabsModule, DatePickerModule, FloatLabel],
+  imports: [HttpClientModule, FormsModule, ButtonModule, TabsModule, DatePickerModule, FloatLabel, AuthComponent],
   providers: [UserService],
 })
 export class AppComponent {
   username: string = '';
   password: string = '';
+  authenticated: boolean = false;
   ID = 0;
   monthlyDate: any;
   weeklyDate:any;
 
   constructor(private userService: UserService) {
     this.monthlyDate = new Date();
+    this.weeklyDate = new Date();
   }
 
   addUser() {
     const newUser = new User(this.username, this.password, this.ID++);
-    console.log(newUser);    
+    console.log(newUser);
     this.userService.addUser(newUser).subscribe(
       (response) => {
         console.log('User added successfully', response);

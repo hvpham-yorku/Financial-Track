@@ -5,6 +5,7 @@ import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import Indigo from '@primeng/themes/aura';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(withEventReplay()), provideAnimationsAsync(),
@@ -12,5 +13,7 @@ export const appConfig: ApplicationConfig = {
         theme: {
             preset: Indigo
         }
-    })]
+    }),
+    provideHttpClient(withFetch()),
+  ]
 };
