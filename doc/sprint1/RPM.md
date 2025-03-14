@@ -40,3 +40,39 @@
 ## Next Steps
 - Follow-up meeting on Friday at 11:30 AM to check progress and resolve any ongoing issues.
 
+## Meeting Details  
+- **Date:** March 14, 2025  
+- **Time:** 11:30 AM to 12:00 PM  
+- **Next Meeting:** Monday at 11:30 AM (Extra Meeting)  
+- **Updated Schedule:** Wednesday's meeting has been moved to **Thursday at 7:00 PM**  
+
+## Participants  
+- **Team Members:**  
+  - Kwangmin Ryu (Backend)  
+  - Jay Patel (Frontend)  
+  - Yashvir Singh (Frontend)  
+  - Mathieu Johnson (Backend)  
+  - Daniel Prilipko (Backend)  
+
+  *All participants have been recorded and contributed to the meeting.*  
+
+## Meeting Summary  
+- **Reviewed** the UI that has been created.  
+- **Went over** other completed and ongoing tasks.  
+- **Decided to continue working** on current tasks as planned.  
+
+## Release Goals  
+- **Objective:** Ensure all features are implemented, tested, and finalized before the next sprint review.  
+- **Key Deliverables:**  
+  - Complete any remaining development tasks.  
+  - Conduct final troubleshooting and bug fixes.  
+  - Ensure seamless integration of frontend and backend.
+
+## Action Items
+- Tasks distributed among participants for each user story:
+  - **Jay Patel** and **Yashvir Singh** will focus on frontend tasks, including income input and time view switching features.
+  - **Kwangmin Ryu**, **Mathieu Johnson**, and **Daniel Prilipko** will focus on backend tasks, including real-time budget summary updates and data storage.
+
+## Next Steps  
+- **Extra meeting on Monday at 11:30 AM** to check progress.  
+- **Follow-up meeting on Thursday at 7:00 PM** (rescheduled from Wednesday) to review final implementation and prepare for the sprint review.
