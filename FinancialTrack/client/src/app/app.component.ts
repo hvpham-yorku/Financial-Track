@@ -9,13 +9,23 @@ import { TabsModule } from 'primeng/tabs';
 import { DatePicker, DatePickerModule } from 'primeng/datepicker';
 import { FloatLabel } from 'primeng/floatlabel';
 import { AuthComponent } from './components/auth/auth.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  imports: [HttpClientModule, FormsModule, ButtonModule, TabsModule, DatePickerModule, FloatLabel, AuthComponent],
+  imports: [
+    HttpClientModule,
+    FormsModule,
+    ButtonModule,
+    TabsModule,
+    DatePickerModule,
+    FloatLabel,
+    AuthComponent,
+    NgIf,
+  ],
   providers: [UserService],
 })
 export class AppComponent {
@@ -24,7 +34,7 @@ export class AppComponent {
   authenticated: boolean = false;
   ID = 0;
   monthlyDate: any;
-  weeklyDate:any;
+  weeklyDate: any;
 
   constructor(private userService: UserService) {
     this.monthlyDate = new Date();
@@ -45,5 +55,4 @@ export class AppComponent {
       }
     );
   }
-
 }
