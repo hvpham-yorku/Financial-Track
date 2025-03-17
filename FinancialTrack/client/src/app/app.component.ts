@@ -151,6 +151,7 @@ export class AppComponent implements OnInit {
     this.monthlyDate = new Date(todayAtNoon);
     this.weeklyDate = new Date(todayAtNoon);
 
+    console.log(this.userData);
   }
 
   ngOnInit() {
@@ -183,6 +184,7 @@ export class AppComponent implements OnInit {
     // Get user profile data
     this.userService.getProfile().subscribe({
       next: (response) => {
+        console.log(response);
         if (response.data) {
           console.log('User profile loaded:', response.data);
           this.userData = response.data;
