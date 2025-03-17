@@ -36,7 +36,7 @@ import { NgIf } from '@angular/common';
   ],
   providers: [UserService],
 })
-export class AppComponent {  
+export class AppComponent {
   username: string = '';
   password: string = '';
   monthlyDate: Date;
@@ -57,28 +57,28 @@ export class AppComponent {
     title: "Work",
     tag: "Work",
     type: "income",
-    createdAt: "2025-03-16"
+    createdAt: "2025-03-17"
   }, {
     id: 2,
     amount: 50.00,
     title: "Tip",
     tag: "Work",
     type: "income",
-    createdAt: "2025-03-16"
+    createdAt: "2025-03-17"
   }, {
     id: 3,
     amount: 56.00,
     title: "Shop",
     tag: "Grocery",
     type: "expense",
-    createdAt: "2025-03-16"
+    createdAt: "2025-03-17"
   }, {
     id: 4,
-    amount: 9.00,
+    amount: 34.00,
     title: "Pet",
     tag: "Grocery",
     type: "expense",
-    createdAt: "2025-03-16"
+    createdAt: "2025-03-17"
   }];
 
   actions = [
@@ -87,18 +87,19 @@ export class AppComponent {
       icon: 'pi pi-plus',
       command: () => {
         this.act = 'Add Transaction';
-        this.showDialog(this.selectedTransaction);
+        this.showAddDialog();
       }
     },
     {
       label: 'Update',
       icon: 'pi pi-pencil',
       command: () => {
-        this.act = 'Update ' + this.selectedTransaction.type;
+        this.act = 'Update ' + this.selectedTransaction?.type;
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
           console.log("Nothing selected");
+          this.showErrorDialog();
         }
       }
     },
@@ -106,11 +107,11 @@ export class AppComponent {
       label: 'Delete',
       icon: 'pi pi-trash',
       command: () => {
-        this.act = 'Delete ' + this.selectedTransaction.type;
+        this.act = 'Delete ' + this.selectedTransaction?.type;
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
-          console.log("Nothing selected");
+          this.showErrorDialog();
         }
       }
     }
@@ -118,7 +119,7 @@ export class AppComponent {
 
   transactionForm: FormGroup = new FormGroup({
     title: new FormControl(''),
-    amount: new FormControl(0),
+    amount: new FormControl(null),
     tag: new FormControl(''),
     type: new FormControl(''),
     createdAt: new FormControl(''),
@@ -126,7 +127,8 @@ export class AppComponent {
   });
   
   selectedTransaction: any = null;
-  authenticated: any;
+  authenticated = true;
+  visible2: boolean = false;
 
   constructor(private userService: UserService) {
     const today = new Date();
@@ -165,6 +167,10 @@ export class AppComponent {
   get totalIncome() {
     return this.incomes.reduce((sum: any, t: { amount: any; }) => sum + t.amount, 0);
   }
+
+  showErrorDialog() {
+    this.visible2 = true;
+  }  
   
   showDialog(transaction:any) {
     // console.log(transaction);
@@ -175,6 +181,13 @@ export class AppComponent {
       type: transaction?.type || '',
       createdAt: transaction?.createdAt || '',
       id: transaction?.id || this.ID++
+    });
+    this.visible = true;
+  } 
+
+  showAddDialog() {
+    this.transactionForm.patchValue({
+      id: this.ID++
     });
     this.visible = true;
   } 
@@ -207,16 +220,17 @@ export class AppComponent {
       formData.amount = Number(formData.amount);
       console.log(formData);
       
-      // this.userService.addTransaction(formData).subscribe({
-      //   next: (response: any) => {
-      //     console.log('Transaction added successfully', response);
-      //     this.transactionForm.reset();
-      //   },
-      //   error: (err: any) => {
-      //     console.error('Error adding transaction', err);
-      //   }
-      // });
+      this.userService.addTransaction(formData).subscribe({
+        next: (response: any) => {
+          console.log('Transaction added successfully', response);
+          // this.transactionForm.reset();
+        },
+        error: (err: any) => {
+          console.error('Error adding transaction', err);
+        }
+      });
     }
+    this.transactionForm.reset();
     this.visible = false;
   }
 
