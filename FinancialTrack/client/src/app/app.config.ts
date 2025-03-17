@@ -11,7 +11,7 @@ export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(withEventReplay()), provideAnimationsAsync(),
     providePrimeNG({
         theme: {
-            preset: Indigo
+            preset: Indigo,
         }
     }),
     provideHttpClient(withFetch()),

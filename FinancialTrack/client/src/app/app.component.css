@@ -25,3 +25,32 @@ div.demo{
 .transactions {                     
     display: flex;       
 }
+
+.button-wrapper {
+    text-align: center;       
+    margin-top: 1rem;           
+}
+
+p-button {
+    margin: 1rem;         
+}
+
+.bottomDialog{
+    text-align: right;
+}
+
+.dialogContent{
+    margin-bottom: 1.5rem;
+}
+
+.btn{
+    margin-right: 5px;
+}
+
+.input{
+    margin-bottom: 1rem;
+}
+
+.lbl{
+    margin-right: 1rem;
+}
