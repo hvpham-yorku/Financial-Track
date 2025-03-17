@@ -1,5 +1,10 @@
-<app-auth *ngIf="!authenticated"></app-auth>
+<div *ngIf="!authenticated">
+  <router-outlet></router-outlet>
+</div>
 <div class="main" *ngIf='authenticated'>
+  <div class="logout-container">
+    <p-button label="Logout" icon="pi pi-sign-out" severity="danger" (click)="logout()"></p-button>
+</div>
     <div class="tabs-container">
         <p-tabs [(value)]="selectedTab">
             <p-tablist>
@@ -43,9 +48,9 @@
                         <ng-template pTemplate="body" let-expense>
                             <tr>
                                 <td>
-                                    <p-radioButton 
-                                        name="transaction" 
-                                        [value]="expense" 
+                                    <p-radioButton
+                                        name="transaction"
+                                        [value]="expense"
                                         [(ngModel)]="selectedTransaction" />
                                 </td>
                                 <td>{{ expense.title }}</td>
@@ -73,9 +78,9 @@
                         <ng-template pTemplate="body" let-income>
                             <tr>
                                 <td>
-                                    <p-radioButton 
-                                        name="transaction" 
-                                        [value]="income" 
+                                    <p-radioButton
+                                        name="transaction"
+                                        [value]="income"
                                         [(ngModel)]="selectedTransaction" />
                                 </td>
                                 <td>{{ income.title }}</td>
@@ -88,15 +93,15 @@
                     <p class="m-0">No income on this date.</p>
                 </ng-template>
             </p-panel>
-        
+
             <div class="button-wrapper">
                 <p-splitbutton label="Actions" [model]="actions"/>
-            </div>            
-        </p-floatlabel>        
+            </div>
+        </p-floatlabel>
         <p-floatlabel variant="in" *ngIf="selectedTab === '1'">
             <p-datepicker [(ngModel)]="weeklyDate" inputId="in_label" showIcon iconDisplay="input" [disabled]="true"/>
             <label for="in_label">Date</label>
-        
+
             <p-panel header="Weekly:" [toggleable]="true">
                 <p class="m-0">
                     Total Income: ${{ totalIncome.toFixed(2) }}
@@ -120,9 +125,9 @@
                         <ng-template pTemplate="body" let-expense>
                             <tr>
                                 <td>
-                                    <p-radioButton 
-                                        name="transaction" 
-                                        [value]="expense" 
+                                    <p-radioButton
+                                        name="transaction"
+                                        [value]="expense"
                                         [(ngModel)]="selectedTransaction" />
                                 </td>
                                 <td>{{ expense.title }}</td>
@@ -150,9 +155,9 @@
                         <ng-template pTemplate="body" let-income>
                             <tr>
                                 <td>
-                                    <p-radioButton 
-                                        name="transaction" 
-                                        [value]="income" 
+                                    <p-radioButton
+                                        name="transaction"
+                                        [value]="income"
                                         [(ngModel)]="selectedTransaction" />
                                 </td>
                                 <td>{{ income.title }}</td>
@@ -165,64 +170,64 @@
                     <p class="m-0">No income on this date.</p>
                 </ng-template>
             </p-panel>
-        
+
             <div class="button-wrapper">
                 <p-splitbutton label="Actions" [model]="actions" />
-            </div>           
-        </p-floatlabel>        
+            </div>
+        </p-floatlabel>
     </div>
 </div>
 <div class="card flex justify-center">
     <p-dialog header="{{ act }}" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
       <form [formGroup]="transactionForm" class="flex flex-col h-full justify-between">
-  
+
         <div class="flex flex-col gap-4 pt-2 dialogContent">
           <div class="flex items-center gap-4 input">
             <label for="title" class="font-semibold w-24 text-right lbl">Title:</label>
-            <input 
-              pInputText 
-              id="title" 
-              formControlName="title" 
+            <input
+              pInputText
+              id="title"
+              formControlName="title"
               class="flex-1" autocomplete="off" />
           </div>
-  
+
           <div class="flex items-center gap-4 input">
             <label for="amount" class="font-semibold w-24 text-right lbl">Amount:</label>
-            <input 
-              pInputText 
-              id="amount" 
-              formControlName="amount" 
+            <input
+              pInputText
+              id="amount"
+              formControlName="amount"
               class="flex-1" autocomplete="off" />
           </div>
-  
+
           <div class="flex items-center gap-4 input">
             <label for="tag" class="font-semibold w-24 text-right lbl">Tag:</label>
-            <input 
-              pInputText 
-              id="tag" 
-              formControlName="tag" 
+            <input
+              pInputText
+              id="tag"
+              formControlName="tag"
               class="flex-1"  autocomplete="off"/>
           </div>
-  
+
           <div class="flex items-center gap-4 input">
             <label for="type" class="font-semibold w-24 text-right lbl">Type:</label>
-            <p-dropdown 
-                id="type" 
+            <p-dropdown
+                id="type"
                 formControlName="type"
-                [options]="typeOptions" 
-                optionLabel="label" 
-                optionValue="value" 
-                class="flex-1" 
+                [options]="typeOptions"
+                optionLabel="label"
+                optionValue="value"
+                class="flex-1"
                 placeholder="Select Type">
             </p-dropdown>
           </div>
 
         </div>
-  
+
         <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
           <p-button class="btn" label="Cancel" severity="secondary" (click)="visible = false"></p-button>
-          <p-button 
-            [label]="labl === 'Delete' ? 'Delete' : (labl === 'Update' ? 'Update' : 'Save')" 
+          <p-button
+            [label]="labl === 'Delete' ? 'Delete' : (labl === 'Update' ? 'Update' : 'Save')"
             (click)="onSave()">
             </p-button>
         </div>
@@ -232,15 +237,14 @@
   <div class="card flex justify-center">
     <p-dialog header="Alert!" [modal]="true" [(visible)]="visible2" [style]="{ width: '25rem' }">
       <form class="flex flex-col h-full justify-between">
-  
+
         <div class="flex flex-col gap-4 pt-2 dialogContent">
           <p>Please select an entry.</p>
         </div>
-  
+
         <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
           <p-button class="btn" label="Ok" severity="secondary" (click)="visible2 = false"></p-button>
         </div>
       </form>
     </p-dialog>
   </div>
-  

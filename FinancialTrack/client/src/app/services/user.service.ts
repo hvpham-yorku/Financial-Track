@@ -10,13 +10,14 @@ export class UserService {
 
   private baseUrl = 'http://localhost:3000';
 
-constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   addUser(user: User): Observable<User> {
-    return this.http.post<User>(this.baseUrl, user);
+    console.warn('This method is deprecated. Use auth/register endpoint instead.');
+    return this.http.post<User>(`${this.baseUrl}/users`, user);
   }
 
-  addTransaction(formData?: any){
+  addTransaction(formData?: any) {
     const token = 'jwt-token';
 
     const headers = new HttpHeaders({
@@ -26,26 +27,22 @@ constructor(private http: HttpClient) { }
 
     return this.http.post<any>(
       `${this.baseUrl}/transactions/add`,
-        formData,
+      formData,
       { headers }
     );
   }
 
   getProfile() {
-    // Get the token from localStorage
     const token = localStorage.getItem('jwt_token');
-  
-    // Create headers with the Authorization token
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-  
-    // Make the request to get the user profile
-    return this.http.get<{data: any, error: string | null}>(`${this.baseUrl}/users`, { headers })
+
+    return this.http.get<{ data: any, error: string | null }>(`${this.baseUrl}/users`, { headers })
       .pipe(
         catchError(error => {
           console.error('Error fetching user profile:', error);
-          return of({data: null, error: 'Failed to load user profile'});
+          return of({ data: null, error: 'Failed to load user profile' });
         })
       );
   }
