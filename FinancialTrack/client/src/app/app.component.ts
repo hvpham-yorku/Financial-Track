@@ -50,6 +50,7 @@ export class AppComponent {
     { label: 'Income', value: 'income' },
     { label: 'Expense', value: 'expense' }
   ];
+  labl:any;
 
   transactions: any = [{
     id: 1,
@@ -87,6 +88,7 @@ export class AppComponent {
       icon: 'pi pi-plus',
       command: () => {
         this.act = 'Add Transaction';
+        this.labl = 'Add';
         this.showAddDialog();
       }
     },
@@ -95,6 +97,7 @@ export class AppComponent {
       icon: 'pi pi-pencil',
       command: () => {
         this.act = 'Update ' + this.selectedTransaction?.type;
+        this.labl = 'Update';
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
@@ -108,6 +111,7 @@ export class AppComponent {
       icon: 'pi pi-trash',
       command: () => {
         this.act = 'Delete ' + this.selectedTransaction?.type;
+        this.labl = 'Delete';
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
@@ -144,6 +148,10 @@ export class AppComponent {
 
   private formatDate(date: Date): string {
     return date ? date.toISOString().split('T')[0] : '';
+  }
+
+  get actionLabel(): string {
+    return this.labl == 'Delete' ? 'Delete' : this.labl == 'Update' ? 'Update' : 'Save';
   }
 
   get filteredTransactions() {
@@ -209,7 +217,7 @@ export class AppComponent {
 
   onSave() {
     this.transactionForm.get('createdAt')?.setValue(this.monthlyDate);
-    this.transactionForm.get('type')?.setValue(this.transactionForm.get('type')?.value.value);
+    // this.transactionForm.get('type')?.value;
     // this.transactionForm.get('id')?.setValue();
     console.log(this.transactionForm);   
     if (this.transactionForm.valid) {

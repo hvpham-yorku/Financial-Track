@@ -1,4 +1,4 @@
-<!-- <app-auth></app-auth> -->
+<app-auth *ngIf="!authenticated"></app-auth>
 <div class="main" *ngIf='authenticated'>
     <div class="tabs-container">
         <p-tabs [(value)]="selectedTab">
@@ -221,7 +221,10 @@
   
         <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
           <p-button class="btn" label="Cancel" severity="secondary" (click)="visible = false"></p-button>
-          <p-button label="Save" (click)="onSave()"></p-button>
+          <p-button 
+            [label]="labl === 'Delete' ? 'Delete' : (labl === 'Update' ? 'Update' : 'Save')" 
+            (click)="onSave()">
+            </p-button>
         </div>
       </form>
     </p-dialog>
