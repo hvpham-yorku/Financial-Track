@@ -26,7 +26,7 @@ export class AuthComponent {
     private router: Router,
     private userService: UserService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) { }
 
   // Toggle between login and register modes
   toggleRegisterMode() {
@@ -51,41 +51,29 @@ export class AuthComponent {
       return;
     }
 
+    const loginData = {
+      username: this.username,
+      password: this.password,
+    };
+
     this.http
       .post<{ data: string | null; error: string | null }>(
-        'http://localhost:3000/auth/login',
-        {
-          username: this.username,
-          password: this.password,
-        }
+        `http://localhost:3000/auth/login`, loginData
       )
       .subscribe({
         next: (response) => {
-          if (response.error) {
-            this.errorMessage = response.error;
-            this.successMessage = '';
-          } else {
-            // Store token and redirect to dashboard (only in browser)
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem('jwt_token', response.data!);
-            }
-            console.log('Login successful!', response.data);
-            this.errorMessage = '';
+          if (response.data) {
+            localStorage.setItem('jwt_token', response.data);
             this.router.navigate(['/dashboard'], {
               queryParams: { authenticated: true },
             });
+          } else if (response.error) {
+            this.errorMessage = response.error;
           }
         },
         error: (error: HttpErrorResponse) => {
-          console.error('Login error:', error);
-          if (error.status === 0) {
-            this.errorMessage = 'Cannot connect to server. Please check if the server is running.';
-          } else if (error.status === 401) {
-            this.errorMessage = 'Invalid username or password.';
-          } else {
-            this.errorMessage = error.error?.error || 'Server error. Please try again later.';
-          }
-          this.successMessage = '';
+          this.errorMessage = "Login failed. Please check your credentials.";
+          console.error('Login error details:', error);
         }
       });
   }
