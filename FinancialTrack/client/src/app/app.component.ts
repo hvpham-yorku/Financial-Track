@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { UserService } from './services/user.service';
 import { User } from './models/user.model';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,7 +9,7 @@ import { TabsModule } from 'primeng/tabs';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabel } from 'primeng/floatlabel';
 import { PanelModule } from 'primeng/panel';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { TableModule } from 'primeng/table';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -18,12 +18,13 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { AuthComponent } from './components/auth/auth.component';
 import { NgIf } from '@angular/common';
+import { RouterOutlet, Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrls: ['./app.component.css'],
   imports: [
     HttpClientModule, DropdownModule, ReactiveFormsModule,
     FormsModule,
@@ -31,12 +32,12 @@ import { NgIf } from '@angular/common';
     TabsModule,
     DatePickerModule,
     FloatLabel, PanelModule, CommonModule,
-    AuthComponent,
+    AuthComponent, RouterOutlet,
     NgIf,
   ],
   providers: [UserService],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   username: string = '';
   password: string = '';
   monthlyDate: Date;
@@ -50,7 +51,7 @@ export class AppComponent {
     { label: 'Income', value: 'income' },
     { label: 'Expense', value: 'expense' }
   ];
-  labl:any;
+  labl: any;
 
   transactions: any = [{
     id: 1,
@@ -129,12 +130,18 @@ export class AppComponent {
     createdAt: new FormControl(''),
     id: new FormControl(''),
   });
-  
-  selectedTransaction: any = null;
-  authenticated = true;
-  visible2: boolean = false;
 
-  constructor(private userService: UserService) {
+  selectedTransaction: any = null;
+  authenticated = false;
+  visible2: boolean = false;
+  userData: any;
+
+  constructor(
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     const today = new Date();
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -142,8 +149,56 @@ export class AppComponent {
     const todayAtNoon = `${yyyy}-${mm}-${dd}T12:00:00`;
 
     this.monthlyDate = new Date(todayAtNoon);
-    this.weeklyDate = new Date(todayAtNoon);  
+    this.weeklyDate = new Date(todayAtNoon);
 
+  }
+
+  ngOnInit() {
+    // Check if user is authenticated from query params
+    this.route.queryParams.subscribe(params => {
+      if (params['authenticated'] === 'true') {
+        this.authenticated = true;
+        this.loadUserData();
+      }
+    });
+
+    // Check if token exists in localStorage (only in browser)
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('jwt_token');
+      if (token) {
+        this.authenticated = true;
+        this.loadUserData();
+      } else {
+        // If no token, ensure we're not authenticated
+        this.authenticated = false;
+        // Navigate to login if we're on dashboard without auth
+        if (this.router.url.includes('dashboard')) {
+          this.router.navigate(['/login']);
+        }
+      }
+    }
+  }
+
+  loadUserData() {
+    // Get user profile data
+    this.userService.getProfile().subscribe({
+      next: (response) => {
+        if (response.data) {
+          console.log('User profile loaded:', response.data);
+          this.userData = response.data;
+        } else if (response.error) {
+          console.error('Error loading profile:', response.error);
+        }
+      }
+    });
+  }
+
+  logout() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('jwt_token');
+    }
+    this.authenticated = false;
+    this.router.navigate(['/login']);
   }
 
   private formatDate(date: Date): string {
@@ -178,9 +233,9 @@ export class AppComponent {
 
   showErrorDialog() {
     this.visible2 = true;
-  }  
-  
-  showDialog(transaction:any) {
+  }
+
+  showDialog(transaction: any) {
     // console.log(transaction);
     this.transactionForm.patchValue({
       title: transaction?.title || '',
@@ -191,14 +246,14 @@ export class AppComponent {
       id: transaction?.id || this.ID++
     });
     this.visible = true;
-  } 
+  }
 
   showAddDialog() {
     this.transactionForm.patchValue({
       id: this.ID++
     });
     this.visible = true;
-  } 
+  }
 
   addUser() {
     const newUser = new User(this.username, this.password, this.ID++);
@@ -219,7 +274,7 @@ export class AppComponent {
     this.transactionForm.get('createdAt')?.setValue(this.monthlyDate);
     // this.transactionForm.get('type')?.value;
     // this.transactionForm.get('id')?.setValue();
-    console.log(this.transactionForm);   
+    console.log(this.transactionForm);
     if (this.transactionForm.valid) {
 
       const formData = this.transactionForm.value;
@@ -227,7 +282,7 @@ export class AppComponent {
       formData.createdAt = formData.createdAt || new Date();
       formData.amount = Number(formData.amount);
       console.log(formData);
-      
+
       this.userService.addTransaction(formData).subscribe({
         next: (response: any) => {
           console.log('Transaction added successfully', response);
