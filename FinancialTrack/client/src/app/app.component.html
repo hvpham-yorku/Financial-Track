@@ -1,25 +1,33 @@
-<app-auth></app-auth>
-<div class="main" *ngIf='authenticated'>
-    <div class="tabs-container">
-        <p-tabs value="0">
-            <p-tablist>
-                <p-tab value="0">Monthly</p-tab>
-                <p-tab value="1">Weekly</p-tab>
-            </p-tablist>
-            <p-tabpanels>
-                <p-tabpanel value="0">
-                    <p-datepicker class="max-w-full" [(ngModel)]="monthlyDate" [inline]="true" [showWeek]="true"/>
-                </p-tabpanel>
-                <p-tabpanel value="1">
-                    <p-datepicker class="max-w-full" [(ngModel)]="weeklyDate" [inline]="true" [showWeek]="true"/>
-                </p-tabpanel>
-            </p-tabpanels>
-        </p-tabs>
-    </div>
-    <div class="transactions">
-        <p-floatlabel variant="in">
-            <p-datepicker [(ngModel)]="monthlyDate" inputId="in_label" showIcon iconDisplay="input" [disabled]="true"/>
-            <label for="in_label">Date</label>
-        </p-floatlabel>
-    </div>
+<div *ngIf="!authenticated">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="main" *ngIf="authenticated">
+  <div class="header">
+    <h1>Financial Track Dashboard</h1>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+  
+  <div class="tabs-container">
+    <p-tabs value="0">
+      <p-tablist>
+        <p-tab value="0">Monthly</p-tab>
+        <p-tab value="1">Weekly</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="0">
+          <p-datepicker class="max-w-full" [(ngModel)]="monthlyDate" [inline]="true" [showWeek]="true"/>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+          <p-datepicker class="max-w-full" [(ngModel)]="weeklyDate" [inline]="true" [showWeek]="true"/>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+  <div class="transactions">
+    <p-floatlabel variant="in">
+      <p-datepicker [(ngModel)]="monthlyDate" inputId="in_label" showIcon iconDisplay="input" [disabled]="true"/>
+      <label for="in_label">Date</label>
+    </p-floatlabel>
+  </div>
 </div>
