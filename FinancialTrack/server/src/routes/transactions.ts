@@ -134,11 +134,37 @@ TransactionsRoute.get("/tags", async (req: Request, res: Response) => {
   }
 });
 
+TransactionsRoute.get(
+  "/:id",
+  async (req: UserAuthInfoRequest, res: Response) => {
+    try {
+      const userId = req.user.id as number;
+      const transactionId = Number(req.params.id);
+      // Check if user exists
+      const user = await User.findByPk(userId);
+      if (!user) {
+        res.status(404).json({ data: null, error: "User not found" });
+        return;
+      }
+
+      // Get the transactions
+      const transaction = await Transaction.getTransaction(
+        user.id,
+        transactionId
+      );
+      res.status(201).json({ data: transaction, error: null });
+    } catch (error) {
+      res.status(500).json({ data: null, error: "Internal server error" });
+    }
+  }
+);
+
 // POST ROUTES
 TransactionsRoute.post("/add", async (req: Request, res: Response) => {
   try {
     const userId = req.user.id as number;
     const payload = req.body as TransactionInsertBody;
+    console.log(payload);
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {

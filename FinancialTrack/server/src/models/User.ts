@@ -6,6 +6,8 @@ export default class User extends Model {
   declare username: string;
   declare password: string;
   declare budget: number;
+  declare createdAt: string;
+  declare updatedAt: string;
 }
 
 User.init(

@@ -12,14 +12,34 @@ declare module "express-serve-static-core" {
 }
 
 const UserRoute = Router();
+UserRoute.use(validateUser);
 
 // DEV ENV
-UserRoute.get("/", async (_, res: Response) => {
+UserRoute.get("/", async (req: Request, res: Response) => {
+  try {
+    const userId = req.user.id as number;
+    // Check if user exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      res.status(404).json({ data: null, error: "User not found" });
+      return;
+    }
+
+    res.status(201).json({
+      data: {
+        username: user.username,
+        budget: user.budget,
+        created_at: user.createdAt,
+        updated_at: user.updatedAt,
+      },
+      error: null,
+    });
+  } catch (error) {
+    res.status(500).json({ data: null, error: "Internal server error" });
+  }
   const users = await User.findAll();
   res.json(users);
 });
-
-UserRoute.use(validateUser);
 
 // GET BUDGET
 UserRoute.get("/budget", async (req: Request, res: Response) => {
