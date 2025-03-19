@@ -23,6 +23,7 @@ TransactionsRoute.use(validateUser);
 // GET ROUTES
 TransactionsRoute.get("/", async (_, res: Response) => {
   res.status(404).json({ data: null, error: "Page Not Found" });
+  return;
 });
 
 TransactionsRoute.get(
@@ -40,8 +41,10 @@ TransactionsRoute.get(
       // Get the transactions
       const transactions = await Transaction.getTransactions(user.id);
       res.status(201).json({ data: transactions, error: null });
+      return;
     } catch (error) {
       res.status(500).json({ data: [], error: "Internal server error" });
+      return;
     }
   }
 );
@@ -72,11 +75,13 @@ TransactionsRoute.get("/all-split", async (req: Request, res: Response) => {
     });
 
     res.json({ data: split, error: null });
-  } catch (error) {
+    return;
+  } catch (error: any) {
     res.status(500).json({
       data: { income: [], expense: [] },
-      error: "Internal server error",
+      error: "Internal server error: " + error.message,
     });
+    return;
   }
 });
 
@@ -174,8 +179,10 @@ TransactionsRoute.post("/add", async (req: Request, res: Response) => {
 
     const t = await Transaction.create({ ...payload, userId });
     res.status(200).json({ data: t, error: null });
-  } catch (error) {
-    res.status(500).json({ data: null, error: "Internal server error" });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ data: null, error: "Internal server error: " + error.message });
   }
 });
 

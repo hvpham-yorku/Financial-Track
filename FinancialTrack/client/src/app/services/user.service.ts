@@ -31,6 +31,17 @@ export class UserService {
     });
   }
 
+  getTransactions() {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<any>(`${this.baseUrl}/transactions/all-split`, {
+      headers,
+    });
+  }
+
   getProfile() {
     const token = localStorage.getItem('jwt_token');
     const headers = new HttpHeaders({
