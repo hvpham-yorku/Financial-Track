@@ -1,4 +1,4 @@
-# Sprint #1 Standup Updates
+# Sprint #1 Standup
 
 ## Standup - March 12, 2025 - Sprint #1 Standup #1
 
