@@ -8,6 +8,7 @@ const AuthRoute = Router();
 
 AuthRoute.get("/", async (_, res: Response) => {
   res.status(404).json({ data: null, error: "Page Not Found" });
+  return;
 });
 
 AuthRoute.post("/register", async (req: Request, res: Response) => {
@@ -31,8 +32,10 @@ AuthRoute.post("/register", async (req: Request, res: Response) => {
       { expiresIn: "7d" }
     );
     res.status(201).json({ data: token, error: null });
+    return;
   } catch (error) {
     res.status(500).json({ data: null, error: "Internal server error" });
+    return;
   }
 });
 
@@ -56,8 +59,10 @@ AuthRoute.post("/login", async (req: Request, res: Response) => {
       { expiresIn: "7d" }
     );
     res.status(200).json({ data: token, error: null });
+    return;
   } catch (error) {
     res.status(500).json({ data: null, error: "Internal server error" });
+    return;
   }
 });
 

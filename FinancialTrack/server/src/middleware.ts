@@ -22,5 +22,7 @@ export const validateUser = (
     }
     req.user = decoded as jwt.JwtPayload;
     next();
+    return;
   });
+  return;
 };

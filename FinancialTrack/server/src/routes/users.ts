@@ -34,11 +34,11 @@ UserRoute.get("/", async (req: Request, res: Response) => {
       },
       error: null,
     });
+    return;
   } catch (error) {
     res.status(500).json({ data: null, error: "Internal server error" });
+    return;
   }
-  const users = await User.findAll();
-  res.json(users);
 });
 
 // GET BUDGET

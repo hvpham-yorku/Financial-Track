@@ -26,13 +26,23 @@ import { RouterOutlet, Router, ActivatedRoute } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   imports: [
-    HttpClientModule, DropdownModule, ReactiveFormsModule,
+    HttpClientModule,
+    DropdownModule,
+    ReactiveFormsModule,
     FormsModule,
-    InputTextModule, DialogModule, RadioButtonModule, ButtonModule, SplitButtonModule, TableModule,
+    InputTextModule,
+    DialogModule,
+    RadioButtonModule,
+    ButtonModule,
+    SplitButtonModule,
+    TableModule,
     TabsModule,
     DatePickerModule,
-    FloatLabel, PanelModule, CommonModule,
-    AuthComponent, RouterOutlet,
+    FloatLabel,
+    PanelModule,
+    CommonModule,
+    AuthComponent,
+    RouterOutlet,
     NgIf,
   ],
   providers: [UserService],
@@ -49,39 +59,44 @@ export class AppComponent implements OnInit {
   act: string | undefined;
   typeOptions = [
     { label: 'Income', value: 'income' },
-    { label: 'Expense', value: 'expense' }
+    { label: 'Expense', value: 'expense' },
   ];
   labl: any;
 
-  transactions: any = [{
-    id: 1,
-    amount: 220.00,
-    title: "Work",
-    tag: "Work",
-    type: "income",
-    createdAt: "2025-03-17"
-  }, {
-    id: 2,
-    amount: 50.00,
-    title: "Tip",
-    tag: "Work",
-    type: "income",
-    createdAt: "2025-03-17"
-  }, {
-    id: 3,
-    amount: 56.00,
-    title: "Shop",
-    tag: "Grocery",
-    type: "expense",
-    createdAt: "2025-03-17"
-  }, {
-    id: 4,
-    amount: 34.00,
-    title: "Pet",
-    tag: "Grocery",
-    type: "expense",
-    createdAt: "2025-03-17"
-  }];
+  transactions: any = [
+    {
+      id: 1,
+      amount: 220.0,
+      title: 'Work',
+      tag: 'Work',
+      type: 'income',
+      createdAt: '2025-03-17',
+    },
+    {
+      id: 2,
+      amount: 50.0,
+      title: 'Tip',
+      tag: 'Work',
+      type: 'income',
+      createdAt: '2025-03-17',
+    },
+    {
+      id: 3,
+      amount: 56.0,
+      title: 'Shop',
+      tag: 'Grocery',
+      type: 'expense',
+      createdAt: '2025-03-17',
+    },
+    {
+      id: 4,
+      amount: 34.0,
+      title: 'Pet',
+      tag: 'Grocery',
+      type: 'expense',
+      createdAt: '2025-03-17',
+    },
+  ];
 
   actions = [
     {
@@ -91,7 +106,7 @@ export class AppComponent implements OnInit {
         this.act = 'Add Transaction';
         this.labl = 'Add';
         this.showAddDialog();
-      }
+      },
     },
     {
       label: 'Update',
@@ -102,10 +117,10 @@ export class AppComponent implements OnInit {
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
-          console.log("Nothing selected");
+          console.log('Nothing selected');
           this.showErrorDialog();
         }
-      }
+      },
     },
     {
       label: 'Delete',
@@ -118,8 +133,8 @@ export class AppComponent implements OnInit {
         } else {
           this.showErrorDialog();
         }
-      }
-    }
+      },
+    },
   ];
 
   transactionForm: FormGroup = new FormGroup({
@@ -128,13 +143,13 @@ export class AppComponent implements OnInit {
     tag: new FormControl(''),
     type: new FormControl(''),
     createdAt: new FormControl(''),
-    id: new FormControl(''),
   });
 
   selectedTransaction: any = null;
   authenticated = false;
   visible2: boolean = false;
   userData: any;
+  dbTransactions: { income: any[]; expense: any[] };
 
   constructor(
     private userService: UserService,
@@ -150,13 +165,12 @@ export class AppComponent implements OnInit {
 
     this.monthlyDate = new Date(todayAtNoon);
     this.weeklyDate = new Date(todayAtNoon);
-
-    console.log(this.userData);
+    this.dbTransactions = { income: [], expense: [] };
   }
 
   ngOnInit() {
     // Check if user is authenticated from query params
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['authenticated'] === 'true') {
         this.authenticated = true;
         this.loadUserData();
@@ -180,18 +194,30 @@ export class AppComponent implements OnInit {
     }
   }
 
-  loadUserData() {
+  async loadUserData() {
     // Get user profile data
     this.userService.getProfile().subscribe({
       next: (response) => {
-        console.log(response);
         if (response.data) {
           console.log('User profile loaded:', response.data);
           this.userData = response.data;
         } else if (response.error) {
           console.error('Error loading profile:', response.error);
         }
-      }
+      },
+    });
+    this.getTransactions();
+  }
+
+  getTransactions() {
+    this.userService.getTransactions().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.dbTransactions = response.data;
+        } else if (response.error) {
+          console.error('Error loading transactions:', response.error);
+        }
+      },
     });
   }
 
@@ -208,29 +234,65 @@ export class AppComponent implements OnInit {
   }
 
   get actionLabel(): string {
-    return this.labl == 'Delete' ? 'Delete' : this.labl == 'Update' ? 'Update' : 'Save';
+    return this.labl == 'Delete'
+      ? 'Delete'
+      : this.labl == 'Update'
+      ? 'Update'
+      : 'Save';
   }
 
   get filteredTransactions() {
-    const selectedDate = this.formatDate(this.selectedTab === '0' ? this.monthlyDate : this.weeklyDate);
-    return this.transactions.filter((t: { createdAt: string; }) => t.createdAt === selectedDate);
+    const selectedDate = this.formatDate(
+      this.selectedTab === '0' ? this.monthlyDate : this.weeklyDate
+    );
+    return this.transactions.filter(
+      (t: { createdAt: string }) => t.createdAt === selectedDate
+    );
+  }
+
+  get filteredExpenses() {
+    const selectedDate = this.formatDate(
+      this.selectedTab === '0' ? this.monthlyDate : this.weeklyDate
+    );
+    return this.dbTransactions.expense.filter(
+      (t: { createdAt: string }) =>
+        this.formatDate(new Date(t.createdAt)) === selectedDate
+    );
+  }
+  get filteredIncomes() {
+    const selectedDate = this.formatDate(
+      this.selectedTab === '0' ? this.monthlyDate : this.weeklyDate
+    );
+    return this.dbTransactions.income.filter(
+      (t: { createdAt: string }) =>
+        this.formatDate(new Date(t.createdAt)) === selectedDate
+    );
   }
 
   get expenses() {
-    // console.log(this.filteredTransactions.filter((t: { type: string; }) => t.type === 'expense'));
-    return this.filteredTransactions.filter((t: { type: string; }) => t.type === 'expense');
+    return this.filteredTransactions.filter(
+      (t: { type: string }) => t.type === 'expense'
+    );
   }
 
   get incomes() {
-    return this.filteredTransactions.filter((t: { type: string; }) => t.type === 'income');
+    return this.filteredTransactions.filter(
+      (t: { type: string }) => t.type === 'income'
+    );
   }
 
   get totalExpense() {
-    return this.expenses.reduce((sum: any, t: { amount: any; }) => sum + t.amount, 0);
+    return this.filteredExpenses.reduce(
+      (sum: any, t: { amount: any }) => sum + t.amount,
+      0
+    );
   }
 
   get totalIncome() {
-    return this.incomes.reduce((sum: any, t: { amount: any; }) => sum + t.amount, 0);
+    return this.filteredIncomes.reduce(
+      (sum: any, t: { amount: any }) => sum + t.amount,
+      0
+    );
   }
 
   showErrorDialog() {
@@ -245,20 +307,16 @@ export class AppComponent implements OnInit {
       tag: transaction?.tag || '',
       type: transaction?.type || '',
       createdAt: transaction?.createdAt || '',
-      id: transaction?.id || this.ID++
     });
     this.visible = true;
   }
 
   showAddDialog() {
-    this.transactionForm.patchValue({
-      id: this.ID++
-    });
     this.visible = true;
   }
 
   addUser() {
-    const newUser = new User(this.username, this.password, this.ID++);
+    const newUser = new User(this.username, this.password);
     console.log(newUser);
     this.userService.addUser(newUser).subscribe(
       (response) => {
@@ -274,11 +332,8 @@ export class AppComponent implements OnInit {
 
   onSave() {
     this.transactionForm.get('createdAt')?.setValue(this.monthlyDate);
-    // this.transactionForm.get('type')?.value;
-    // this.transactionForm.get('id')?.setValue();
-    console.log(this.transactionForm);
-    if (this.transactionForm.valid) {
 
+    if (this.transactionForm.valid) {
       const formData = this.transactionForm.value;
 
       formData.createdAt = formData.createdAt || new Date();
@@ -288,15 +343,15 @@ export class AppComponent implements OnInit {
       this.userService.addTransaction(formData).subscribe({
         next: (response: any) => {
           console.log('Transaction added successfully', response);
-          // this.transactionForm.reset();
+          // Refresh transactions
+          this.getTransactions();
         },
         error: (err: any) => {
           console.error('Error adding transaction', err);
-        }
+        },
       });
     }
     this.transactionForm.reset();
     this.visible = false;
   }
-
 }
