@@ -143,8 +143,8 @@ The following user stories were identified as the primary focus for the release,
 
 ## Meeting Details (Finalization):
 - **Date:** March 20, 2025
-- **Time:** 12:00 PM to 1:00 PM
-- **Next Meeting:** Thursday at 7:30 PM (Sprint 2)
+- **Time:** 7:00 PM to 8:00 PM
+- **Next Meeting:** Wednesday at 7:00 PM (Sprint 2)
 
 ---
 
