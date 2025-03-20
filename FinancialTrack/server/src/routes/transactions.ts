@@ -229,8 +229,8 @@ TransactionsRoute.delete("/delete", async (req: Request, res: Response) => {
     // Delete the transaction
     await transaction.destroy();
     res.status(200).json({ error: null });
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+  } catch (error: any) {
+    res.status(500).json({ error: "Internal server error: " + error.message });
   }
 });
 
