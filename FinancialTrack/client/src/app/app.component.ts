@@ -143,6 +143,7 @@ export class AppComponent implements OnInit {
     tag: new FormControl(''),
     type: new FormControl(''),
     createdAt: new FormControl(''),
+    id: new FormControl(''),
   });
 
   selectedTransaction: any = null;
@@ -237,8 +238,8 @@ export class AppComponent implements OnInit {
     return this.labl == 'Delete'
       ? 'Delete'
       : this.labl == 'Update'
-      ? 'Update'
-      : 'Save';
+        ? 'Update'
+        : 'Save';
   }
 
   get filteredTransactions() {
@@ -307,6 +308,7 @@ export class AppComponent implements OnInit {
       tag: transaction?.tag || '',
       type: transaction?.type || '',
       createdAt: transaction?.createdAt || '',
+      id: transaction.id
     });
     this.visible = true;
   }
@@ -332,23 +334,44 @@ export class AppComponent implements OnInit {
 
   onSave() {
     this.transactionForm.get('createdAt')?.setValue(this.monthlyDate);
+    const formData = this.transactionForm.value;
+    formData.createdAt = formData.createdAt || new Date();
+    formData.amount = Number(formData.amount);
+    // console.log(formData, this.transactionForm);
+    if (this.labl == 'Add') {
 
-    if (this.transactionForm.valid) {
-      const formData = this.transactionForm.value;
+      if (this.transactionForm.valid) {
+        const { id, ...dataWithoutId } = formData;
+        this.userService.addTransaction(dataWithoutId).subscribe({
+          next: (response: any) => {
+            console.log('Transaction added successfully', response);
+            // Refresh transactions
+            this.getTransactions();
+          },
+          error: (err: any) => {
+            console.error('Error adding transaction', err);
+          },
+        });
+      }
 
-      formData.createdAt = formData.createdAt || new Date();
-      formData.amount = Number(formData.amount);
-      console.log(formData);
+    }else if(this.labl == 'Update'){
 
-      this.userService.addTransaction(formData).subscribe({
-        next: (response: any) => {
-          console.log('Transaction added successfully', response);
-          // Refresh transactions
-          this.getTransactions();
-        },
-        error: (err: any) => {
-          console.error('Error adding transaction', err);
-        },
+      this.userService.updateTransaction(formData).subscribe(response => {
+        console.log('Transaction updated successfully:', response);
+        this.getTransactions();
+        this.selectedTransaction = null;
+      }, error => {
+        console.error('Error updating transaction:', error);
+      });
+
+    }else{
+
+      this.userService.deleteTransaction(formData.id).subscribe(response => {
+        console.log('Transaction deleted successfully:', response);
+        this.getTransactions();
+        this.selectedTransaction = null;
+      }, error => {
+        console.error('Error deleting transaction:', error);
       });
     }
     this.transactionForm.reset();
