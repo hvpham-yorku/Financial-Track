@@ -35,7 +35,13 @@
 
 10. As a freelancer, I want to use this financial tracker application to manage my budget and take control of my finances as a self-employed individual.
 
+---
+
 ## Practices
+
+Organize the branches in a clear and structured way to avoid confusion and ensure that everyone knows where to work and what tasks to focus on.
+
+---
 
 ### Practices Used
 
