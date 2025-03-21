@@ -55,4 +55,4 @@ Having too many branches in GitHub without a clear organization led to confusion
 
 ## Experience
 
-Although it was the first time working with each group member, the workflow went smoothly, and everyone collaborated effectively to achieve our goals, with no conflicts arising throughout the process.
+Although it was the first time working with each group member, the workflow went smoothly, and everyone collaborated effectively to achieve our goals, with no conflicts arising throughout the process. We had a hard time scheduling meetings during Sprint 1 due to midterms, which caused conflicting schedules and made it difficult for everyone to attend. This challenge led to delays in coordination and affected the overall timing of some tasks.
