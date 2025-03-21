@@ -41,12 +41,17 @@
 
 ### Practices Used
 
+The team's communication was excellent, the work was well divided among members, and participation in the meetings was strong, ensuring smooth collaboration throughout the sprint.
+
 ### New Practices
 
-Organize the branches in a clear and structured way to avoid confusion and ensure that everyone knows where to work and what tasks to focus on.
-
----
+Organize the branches in a clear and structured way to avoid confusion and ensure that everyone knows where to work and what tasks to focus on. Having a meeting scheduling system in Discord helps streamline the process of organizing and coordinating meetings.
 
 ### Harmful Practices
 
+Having too many branches in GitHub without a clear organization led to confusion and made it difficult for the team to know where to focus. The lack of a scheduling system in Discord also caused issues, as it was hard to coordinate meetings effectively, leading to missed discussions and unclear expectations. This disorganization ultimately slowed down our workflow and communication.
+
+---
+
 ## Experience
+
