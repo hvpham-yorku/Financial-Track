@@ -1,8 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import { Config } from "./config";
-import User from "./models/User";
 import cors from "cors";
+import AuthRoute from "./routes/auth";
+import TransactionsRoute from "./routes/transactions";
+import UserRoute from "./routes/users";
 
 const app: Express = express();
 app.use(cors());
@@ -13,16 +15,9 @@ app.get("/", async (_, res: Response) => {
   res.send("Financial Track Server");
 });
 
-app.get("/users", async (_, res: Response) => {
-  const users = await User.findAll();
-  res.json(users);
-});
-
-app.post("/users", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const user = await User.create({ username, password });
-  res.json(user);
-});
+app.use("/users", UserRoute);
+app.use("/auth", AuthRoute);
+app.use("/transactions", TransactionsRoute);
 
 app.listen(Config.PORT, () => {
   console.log(`[server]: Server is running at http://localhost:${Config.PORT}`);

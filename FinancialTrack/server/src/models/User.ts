@@ -5,11 +5,13 @@ export default class User extends Model {
   declare id: number;
   declare username: string;
   declare password: string;
+  declare budget: number;
+  declare createdAt: string;
+  declare updatedAt: string;
 }
 
 User.init(
   {
-    // Model attributes are defined here
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -18,17 +20,24 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    budget: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      defaultValue: 0.0,
+    },
   },
   {
-    // Other model options go here
     sequelize: db,
     modelName: "User",
   }
 );
 
-User.sync();
+(async () => {
+  await User.sync();
+})();

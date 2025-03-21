@@ -1,0 +1,42 @@
+<div class="auth-container">
+  <div class="auth-header">
+    <h1>Financial Track</h1>
+    <p>Manage your finances with ease</p>
+  </div>
+
+  <div class="auth-form">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" [(ngModel)]="username" placeholder="Enter username">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" [(ngModel)]="password" placeholder="Enter Password">
+    </div>
+
+    <div *ngIf="isRegistering" class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" placeholder="Confirm Password">
+    </div>
+
+    <!-- Login/Register buttons shown when not in registration mode -->
+    <div *ngIf="!isRegistering" class="auth-buttons">
+      <button (click)="login()" class="login-btn">Login</button>
+      <button (click)="toggleRegisterMode()" class="register-btn">Register</button>
+    </div>
+
+    <!-- Submit button shown when in registration mode -->
+    <div *ngIf="isRegistering" class="register-actions">
+      <button (click)="submitRegistration()" class="submit-btn">Submit</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+  </div>
+</div>
