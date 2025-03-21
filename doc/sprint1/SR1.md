@@ -39,13 +39,13 @@
 
 ## Practices
 
-Organize the branches in a clear and structured way to avoid confusion and ensure that everyone knows where to work and what tasks to focus on.
-
----
-
 ### Practices Used
 
 ### New Practices
+
+Organize the branches in a clear and structured way to avoid confusion and ensure that everyone knows where to work and what tasks to focus on.
+
+---
 
 ### Harmful Practices
 
