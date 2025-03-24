@@ -28,6 +28,37 @@ export default class Transaction extends Model {
       : Transaction.findAll({ where: { userId, type } });
   }
 
+  public static getTransactionsByMonth(userId: number, month: string) {
+    return Transaction.findAll({ where: { userId } }).then((transactions) =>
+      transactions.filter((t) => {
+        const month_created = t.createdAt.getMonth();
+        return month_created + 1 === Number(month);
+      })
+    );
+  }
+  public static getTransactionsByWeek(userId: number, date: Date) {
+    return Transaction.findAll({ where: { userId } }).then((transactions) =>
+      transactions.filter((t) => {
+        const getWeekStart = (date: Date): Date => {
+          const d = new Date(date);
+          d.setHours(0, 0, 0, 0); // Normalize time to midnight
+          d.setDate(d.getDate() - d.getDay()); // Subtract days to get to Sunday
+          return d;
+        };
+
+        // Get normalized copies of the input dates
+        const date1 = new Date(date);
+        const date2 = new Date(t.createdAt);
+
+        // Get the start of each week
+        const weekStart1 = getWeekStart(date1);
+        const weekStart2 = getWeekStart(date2);
+        // Compare the week starts
+        return weekStart1.getTime() === weekStart2.getTime();
+      })
+    );
+  }
+
   public static async getTags(userId: number): Promise<string[]> {
     return Transaction.findAll({
       where: {

@@ -49,6 +49,57 @@ TransactionsRoute.get(
   }
 );
 
+TransactionsRoute.get(
+  "/month",
+  async (req: UserAuthInfoRequest, res: Response) => {
+    try {
+      const userId = req.user.id as number;
+      // Check if user exists
+      const user = await User.findByPk(userId);
+      if (!user) {
+        res.status(404).json({ data: [], error: "User not found" });
+        return;
+      }
+
+      // Get the transactions
+      const transactions = await Transaction.getTransactionsByMonth(
+        user.id,
+        req.body.month
+      );
+      res.status(201).json({ data: transactions, error: null });
+      return;
+    } catch (error) {
+      res.status(500).json({ data: [], error: "Internal server error" });
+      return;
+    }
+  }
+);
+TransactionsRoute.get(
+  "/week",
+  async (req: UserAuthInfoRequest, res: Response) => {
+    try {
+      const userId = req.user.id as number;
+      // Check if user exists
+      const user = await User.findByPk(userId);
+      if (!user) {
+        res.status(404).json({ data: [], error: "User not found" });
+        return;
+      }
+
+      // Get the transactions
+      const transactions = await Transaction.getTransactionsByWeek(
+        user.id,
+        new Date(req.body.date)
+      );
+      res.status(201).json({ data: transactions, error: null });
+      return;
+    } catch (error) {
+      res.status(500).json({ data: [], error: "Internal server error" });
+      return;
+    }
+  }
+);
+
 TransactionsRoute.get("/all-split", async (req: Request, res: Response) => {
   try {
     const userId = req.user.id as number;
