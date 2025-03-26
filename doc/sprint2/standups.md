@@ -11,8 +11,8 @@
 - **Frontend:** Finalize the graph functionality for income/expenses and implement the feature allowing users to add notes to budget summaries.
 
 ## 3. When do you think you'll be done?
-- **Backend:** Expect to complete missing features by Friday's meeting.
-- **Frontend:** Complete UI changes and finalize new features by Friday's meeting.
+- **Backend:** Expect to complete missing features in this sprint.
+- **Frontend:** Complete UI changes and finalize new features in this sprint.
 
 ## 4. Do you have any blockers or challenges?
 - No major blockers identified, but will continue working through the remaining features.
