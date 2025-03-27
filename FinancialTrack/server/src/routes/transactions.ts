@@ -74,7 +74,7 @@ TransactionsRoute.get(
     }
   }
 );
-TransactionsRoute.get(
+TransactionsRoute.post(
   "/week",
   async (req: UserAuthInfoRequest, res: Response) => {
     try {
