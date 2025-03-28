@@ -39,5 +39,5 @@
 - No blockers for the backend team. We are waiting for the frontend to be ready for the integration phase.
 
 **5. Next Meeting:**
-- The next standup meeting will be held on **Sunday, March 30, 2025, at 6:00 PM** for a quick check-in and to test the integration together.
+- The next standup meeting will be held on **Monday, March 31, 2025, at 10:30 PM** for a quick check-in and to test the integration together.
 
