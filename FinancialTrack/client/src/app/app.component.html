@@ -1,311 +1,333 @@
 <div *ngIf="!authenticated">
   <router-outlet></router-outlet>
 </div>
-<div class="main" *ngIf="authenticated">
-  <div class="logout-container">
-    <p-button
-      label="Logout"
-      icon="pi pi-sign-out"
-      severity="danger"
-      (click)="logout()"
-    ></p-button>
+<div class="dashboard">
+  <div class="card">
+    <p-menubar [model]="items"  class="static-menubar">
+      <ng-template #start>
+        <h2 class="financial-heading">FINANCIAL TRACKER</h2>    
+      </ng-template>
+      <ng-template #end>
+          <div class="flex items-center gap-2">
+            <p-button (onClick)="toggle($event)"><i class="pi pi-user" style="font-size: 1.5rem"></i></p-button>
+            <p-popover #op>
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <p>Name: {{userData.username}}</p>
+                        <p>Email: {{userData.email}}</p>
+                    </div>
+                    <div class="logout-container">
+                      <p-button
+                        label="Logout"
+                        icon="pi pi-sign-out"
+                        severity="danger"
+                        (click)="logout()"
+                      ></p-button>
+                    </div>
+                </div>
+            </p-popover>
+          </div>
+      </ng-template>
+  </p-menubar>
   </div>
-  <div class="tabs-container">
-    <p-tabs [(value)]="selectedTab">
-      <p-tablist>
-        <p-tab value="0">Monthly</p-tab>
-        <p-tab value="1">Weekly</p-tab>
-      </p-tablist>
-      <p-tabpanels>
-        <p-tabpanel value="0">
-          <p-datepicker
-            class="max-w-full"
-            [(ngModel)]="monthlyDate"
-            [inline]="true"
-            [showWeek]="true"
-          />
-        </p-tabpanel>
-        <p-tabpanel value="1">
-          <p-datepicker
-            class="max-w-full"
-            [(ngModel)]="weeklyDate"
-            [inline]="true"
-            [showWeek]="true"
-          />
-        </p-tabpanel>
-      </p-tabpanels>
-    </p-tabs>
+  <div class="main" *ngIf="authenticated">
+    <div class="tabs-container">
+      <p-tabs [(value)]="selectedTab">
+        <p-tablist>
+          <p-tab value="0">Monthly</p-tab>
+          <p-tab value="1">Weekly</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel value="0">
+            <p-datepicker
+              class="max-w-full"
+              [(ngModel)]="monthlyDate"
+              [inline]="true"
+              [showWeek]="true"
+            />
+          </p-tabpanel>
+          <p-tabpanel value="1">
+            <p-datepicker
+              class="max-w-full"
+              [(ngModel)]="weeklyDate"
+              [inline]="true"
+              [showWeek]="true"
+            />
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+    </div>
+    <div class="transactions">
+      <p-floatlabel variant="in" *ngIf="selectedTab === '0'">
+        <p-datepicker
+          [(ngModel)]="monthlyDate"
+          inputId="in_label"
+          showIcon
+          iconDisplay="input"
+          [disabled]="true"
+        />
+        <label for="in_label">Date</label>
+        <p-panel header="Monthly:" [toggleable]="true">
+          <p class="m-0">Total Income: ${{ totalIncome.toFixed(2) }}</p>
+          <p class="m-0">Total Expense: ${{ totalExpense.toFixed(2) }}</p>
+          <h4>Expense:</h4>
+          <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
+            <!-- <p class="m-0" *ngFor="let expense of expenses">
+                          {{ expense.title }}: ${{ expense.amount.toFixed(2) }}
+                      </p> -->
+            <p-table [value]="filteredExpenses" [tableStyle]="{ width: '0rem' }">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 0rem"></th>
+                  <th>Name</th>
+                  <th>Cost</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-expense>
+                <tr>
+                  <td>
+                    <p-radioButton
+                      name="transaction"
+                      [value]="expense"
+                      [(ngModel)]="selectedTransaction"
+                    />
+                  </td>
+                  <td>{{ expense.title }}</td>
+                  <td>${{ expense.amount.toFixed(2) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noExpenses>
+            <p class="m-0">No expenses on this date.</p>
+          </ng-template>
+          <h4>Income:</h4>
+          <ng-container *ngIf="filteredIncomes.length > 0; else noIncomes">
+            <!-- <p class="m-0" *ngFor="let income of incomes">
+                          {{ income.title }}: ${{ income.amount.toFixed(2) }}
+                      </p> -->
+            <p-table [value]="filteredIncomes" [tableStyle]="{ width: '0rem' }">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 0rem"></th>
+                  <th>Name</th>
+                  <th>Cost</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-income>
+                <tr>
+                  <td>
+                    <p-radioButton
+                      name="transaction"
+                      [value]="income"
+                      [(ngModel)]="selectedTransaction"
+                    />
+                  </td>
+                  <td>{{ income.title }}</td>
+                  <td>${{ income.amount.toFixed(2) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noIncomes>
+            <p class="m-0">No income on this date.</p>
+          </ng-template>
+        </p-panel>
+  
+        <div class="button-wrapper">
+          <p-splitbutton label="Actions" [model]="actions" />
+        </div>
+      </p-floatlabel>
+      <p-floatlabel variant="in" *ngIf="selectedTab === '1'">
+        <p-datepicker
+          [(ngModel)]="weeklyDate"
+          inputId="in_label"
+          showIcon
+          iconDisplay="input"
+          [disabled]="true"
+        />
+        <label for="in_label">Date</label>
+  
+        <p-panel header="Weekly:" [toggleable]="true">
+          <p class="m-0">Total Income: ${{ totalIncome.toFixed(2) }}</p>
+          <p class="m-0">Total Expense: ${{ totalExpense.toFixed(2) }}</p>
+          <h4>Expense:</h4>
+          <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
+            <!-- <p class="m-0" *ngFor="let expense of expenses">
+                          {{ expense.title }}: ${{ expense.amount.toFixed(2) }}
+                      </p> -->
+            <p-table [value]="filteredExpenses" [tableStyle]="{ width: '0rem' }">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 0rem"></th>
+                  <th>Name</th>
+                  <th>Cost</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-expense>
+                <tr>
+                  <td>
+                    <p-radioButton
+                      name="transaction"
+                      [value]="expense"
+                      [(ngModel)]="selectedTransaction"
+                    />
+                  </td>
+                  <td>{{ expense.title }}</td>
+                  <td>${{ expense.amount.toFixed(2) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noExpenses>
+            <p class="m-0">No expenses on this date.</p>
+          </ng-template>
+          <h4>Income:</h4>
+          <ng-container *ngIf="filteredIncomes.length > 0; else noIncomes">
+            <!-- <p class="m-0" *ngFor="let income of incomes">
+                          {{ income.title }}: ${{ income.amount.toFixed(2) }}
+                      </p> -->
+            <p-table [value]="filteredIncomes" [tableStyle]="{ width: '0rem' }">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 0rem"></th>
+                  <th>Name</th>
+                  <th>Cost</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-income>
+                <tr>
+                  <td>
+                    <p-radioButton
+                      name="transaction"
+                      [value]="income"
+                      [(ngModel)]="selectedTransaction"
+                    />
+                  </td>
+                  <td>{{ income.title }}</td>
+                  <td>${{ income.amount.toFixed(2) }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+          <ng-template #noIncomes>
+            <p class="m-0">No income on this date.</p>
+          </ng-template>
+        </p-panel>
+  
+        <div class="button-wrapper">
+          <p-splitbutton label="Actions" [model]="actions" />
+        </div>
+      </p-floatlabel>
+    </div>
   </div>
-  <div class="transactions">
-    <p-floatlabel variant="in" *ngIf="selectedTab === '0'">
-      <p-datepicker
-        [(ngModel)]="monthlyDate"
-        inputId="in_label"
-        showIcon
-        iconDisplay="input"
-        [disabled]="true"
-      />
-      <label for="in_label">Date</label>
-      <p-panel header="Monthly:" [toggleable]="true">
-        <p class="m-0">Total Income: ${{ totalIncome.toFixed(2) }}</p>
-        <p class="m-0">Total Expense: ${{ totalExpense.toFixed(2) }}</p>
-        <h4>Expense:</h4>
-        <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
-          <!-- <p class="m-0" *ngFor="let expense of expenses">
-                        {{ expense.title }}: ${{ expense.amount.toFixed(2) }}
-                    </p> -->
-          <p-table [value]="filteredExpenses" [tableStyle]="{ width: '0rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width: 0rem"></th>
-                <th>Name</th>
-                <th>Cost</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-expense>
-              <tr>
-                <td>
-                  <p-radioButton
-                    name="transaction"
-                    [value]="expense"
-                    [(ngModel)]="selectedTransaction"
-                  />
-                </td>
-                <td>{{ expense.title }}</td>
-                <td>${{ expense.amount.toFixed(2) }}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </ng-container>
-        <ng-template #noExpenses>
-          <p class="m-0">No expenses on this date.</p>
-        </ng-template>
-        <h4>Income:</h4>
-        <ng-container *ngIf="filteredIncomes.length > 0; else noIncomes">
-          <!-- <p class="m-0" *ngFor="let income of incomes">
-                        {{ income.title }}: ${{ income.amount.toFixed(2) }}
-                    </p> -->
-          <p-table [value]="filteredIncomes" [tableStyle]="{ width: '0rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width: 0rem"></th>
-                <th>Name</th>
-                <th>Cost</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-income>
-              <tr>
-                <td>
-                  <p-radioButton
-                    name="transaction"
-                    [value]="income"
-                    [(ngModel)]="selectedTransaction"
-                  />
-                </td>
-                <td>{{ income.title }}</td>
-                <td>${{ income.amount.toFixed(2) }}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </ng-container>
-        <ng-template #noIncomes>
-          <p class="m-0">No income on this date.</p>
-        </ng-template>
-      </p-panel>
-
-      <div class="button-wrapper">
-        <p-splitbutton label="Actions" [model]="actions" />
-      </div>
-    </p-floatlabel>
-    <p-floatlabel variant="in" *ngIf="selectedTab === '1'">
-      <p-datepicker
-        [(ngModel)]="weeklyDate"
-        inputId="in_label"
-        showIcon
-        iconDisplay="input"
-        [disabled]="true"
-      />
-      <label for="in_label">Date</label>
-
-      <p-panel header="Weekly:" [toggleable]="true">
-        <p class="m-0">Total Income: ${{ totalIncome.toFixed(2) }}</p>
-        <p class="m-0">Total Expense: ${{ totalExpense.toFixed(2) }}</p>
-        <h4>Expense:</h4>
-        <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
-          <!-- <p class="m-0" *ngFor="let expense of expenses">
-                        {{ expense.title }}: ${{ expense.amount.toFixed(2) }}
-                    </p> -->
-          <p-table [value]="filteredExpenses" [tableStyle]="{ width: '0rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width: 0rem"></th>
-                <th>Name</th>
-                <th>Cost</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-expense>
-              <tr>
-                <td>
-                  <p-radioButton
-                    name="transaction"
-                    [value]="expense"
-                    [(ngModel)]="selectedTransaction"
-                  />
-                </td>
-                <td>{{ expense.title }}</td>
-                <td>${{ expense.amount.toFixed(2) }}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </ng-container>
-        <ng-template #noExpenses>
-          <p class="m-0">No expenses on this date.</p>
-        </ng-template>
-        <h4>Income:</h4>
-        <ng-container *ngIf="filteredIncomes.length > 0; else noIncomes">
-          <!-- <p class="m-0" *ngFor="let income of incomes">
-                        {{ income.title }}: ${{ income.amount.toFixed(2) }}
-                    </p> -->
-          <p-table [value]="filteredIncomes" [tableStyle]="{ width: '0rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width: 0rem"></th>
-                <th>Name</th>
-                <th>Cost</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-income>
-              <tr>
-                <td>
-                  <p-radioButton
-                    name="transaction"
-                    [value]="income"
-                    [(ngModel)]="selectedTransaction"
-                  />
-                </td>
-                <td>{{ income.title }}</td>
-                <td>${{ income.amount.toFixed(2) }}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </ng-container>
-        <ng-template #noIncomes>
-          <p class="m-0">No income on this date.</p>
-        </ng-template>
-      </p-panel>
-
-      <div class="button-wrapper">
-        <p-splitbutton label="Actions" [model]="actions" />
-      </div>
-    </p-floatlabel>
-  </div>
-</div>
-<div class="card flex justify-center">
-  <p-dialog
-    header="{{ act }}"
-    [modal]="true"
-    [(visible)]="visible"
-    [style]="{ width: '25rem' }"
-  >
-    <form
-      [formGroup]="transactionForm"
-      class="flex flex-col h-full justify-between"
+  <div class="card flex justify-center">
+    <p-dialog
+      header="{{ act }}"
+      [modal]="true"
+      [(visible)]="visible"
+      [style]="{ width: '25rem' }"
     >
-      <div class="flex flex-col gap-4 pt-2 dialogContent">
-        <div class="flex items-center gap-4 input">
-          <label for="title" class="font-semibold w-24 text-right lbl"
-            >Title:</label
-          >
-          <input
-            pInputText
-            id="title"
-            formControlName="title"
-            class="flex-1"
-            autocomplete="off"
-          />
+      <form
+        [formGroup]="transactionForm"
+        class="flex flex-col h-full justify-between"
+      >
+        <div class="flex flex-col gap-4 pt-2 dialogContent">
+          <div class="flex items-center gap-4 input">
+            <label for="title" class="font-semibold w-24 text-right lbl"
+              >Title:</label
+            >
+            <input
+              pInputText
+              id="title"
+              formControlName="title"
+              class="flex-1"
+              autocomplete="off"
+            />
+          </div>
+  
+          <div class="flex items-center gap-4 input">
+            <label for="amount" class="font-semibold w-24 text-right lbl"
+              >Amount:</label
+            >
+            <input
+              pInputText
+              id="amount"
+              formControlName="amount"
+              class="flex-1"
+              autocomplete="off"
+            />
+          </div>
+  
+          <div class="flex items-center gap-4 input">
+            <label for="tag" class="font-semibold w-24 text-right lbl"
+              >Tag:</label
+            >
+            <input
+              pInputText
+              id="tag"
+              formControlName="tag"
+              class="flex-1"
+              autocomplete="off"
+            />
+          </div>
+  
+          <div class="flex items-center gap-4 input">
+            <label for="type" class="font-semibold w-24 text-right lbl"
+              >Type:</label
+            >
+            <p-dropdown
+              id="type"
+              formControlName="type"
+              [options]="typeOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="flex-1"
+              placeholder="Select Type"
+            >
+            </p-dropdown>
+          </div>
         </div>
-
-        <div class="flex items-center gap-4 input">
-          <label for="amount" class="font-semibold w-24 text-right lbl"
-            >Amount:</label
+  
+        <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
+          <p-button
+            class="btn"
+            label="Cancel"
+            severity="secondary"
+            (click)="visible = false"
+          ></p-button>
+          <p-button
+            [label]="
+              labl === 'Delete' ? 'Delete' : labl === 'Update' ? 'Update' : 'Save'
+            "
+            (click)="onSave()"
           >
-          <input
-            pInputText
-            id="amount"
-            formControlName="amount"
-            class="flex-1"
-            autocomplete="off"
-          />
+          </p-button>
         </div>
-
-        <div class="flex items-center gap-4 input">
-          <label for="tag" class="font-semibold w-24 text-right lbl"
-            >Tag:</label
-          >
-          <input
-            pInputText
-            id="tag"
-            formControlName="tag"
-            class="flex-1"
-            autocomplete="off"
-          />
+      </form>
+    </p-dialog>
+  </div>
+  <div class="card flex justify-center">
+    <p-dialog
+      header="Alert!"
+      [modal]="true"
+      [(visible)]="visible2"
+      [style]="{ width: '25rem' }"
+    >
+      <form class="flex flex-col h-full justify-between">
+        <div class="flex flex-col gap-4 pt-2 dialogContent">
+          <p>{{errorMsg}}</p>
         </div>
-
-        <div class="flex items-center gap-4 input">
-          <label for="type" class="font-semibold w-24 text-right lbl"
-            >Type:</label
-          >
-          <p-dropdown
-            id="type"
-            formControlName="type"
-            [options]="typeOptions"
-            optionLabel="label"
-            optionValue="value"
-            class="flex-1"
-            placeholder="Select Type"
-          >
-          </p-dropdown>
+  
+        <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
+          <p-button
+            class="btn"
+            label="Ok"
+            severity="secondary"
+            (click)="visible2 = false"
+          ></p-button>
         </div>
-      </div>
-
-      <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
-        <p-button
-          class="btn"
-          label="Cancel"
-          severity="secondary"
-          (click)="visible = false"
-        ></p-button>
-        <p-button
-          [label]="
-            labl === 'Delete' ? 'Delete' : labl === 'Update' ? 'Update' : 'Save'
-          "
-          (click)="onSave()"
-        >
-        </p-button>
-      </div>
-    </form>
-  </p-dialog>
-</div>
-<div class="card flex justify-center">
-  <p-dialog
-    header="Alert!"
-    [modal]="true"
-    [(visible)]="visible2"
-    [style]="{ width: '25rem' }"
-  >
-    <form class="flex flex-col h-full justify-between">
-      <div class="flex flex-col gap-4 pt-2 dialogContent">
-        <p>Please select an entry.</p>
-      </div>
-
-      <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
-        <p-button
-          class="btn"
-          label="Ok"
-          severity="secondary"
-          (click)="visible2 = false"
-        ></p-button>
-      </div>
-    </form>
-  </p-dialog>
+      </form>
+    </p-dialog>
+  </div>
 </div>

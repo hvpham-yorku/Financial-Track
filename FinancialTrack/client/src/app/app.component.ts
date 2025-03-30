@@ -1,4 +1,4 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject, ViewChild } from '@angular/core';
 import { UserService } from './services/user.service';
 import { User } from './models/user.model';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,9 +16,11 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import { AuthComponent } from './components/auth/auth.component';
 import { NgIf } from '@angular/common';
 import { RouterOutlet, Router, ActivatedRoute } from '@angular/router';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuItem } from 'primeng/api';
+import { Popover, PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +34,7 @@ import { RouterOutlet, Router, ActivatedRoute } from '@angular/router';
     FormsModule,
     InputTextModule,
     DialogModule,
+    MenubarModule,
     RadioButtonModule,
     ButtonModule,
     SplitButtonModule,
@@ -41,9 +44,9 @@ import { RouterOutlet, Router, ActivatedRoute } from '@angular/router';
     FloatLabel,
     PanelModule,
     CommonModule,
-    AuthComponent,
     RouterOutlet,
     NgIf,
+    PopoverModule,
   ],
   providers: [UserService],
 })
@@ -62,6 +65,7 @@ export class AppComponent implements OnInit {
     { label: 'Expense', value: 'expense' },
   ];
   labl: any;
+  @ViewChild('op') op!: Popover;
 
   transactions: any = [
     {
@@ -98,6 +102,8 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  items: MenuItem[] | undefined;
+
   actions = [
     {
       label: 'Add',
@@ -118,7 +124,8 @@ export class AppComponent implements OnInit {
           this.showDialog(this.selectedTransaction);
         } else {
           console.log('Nothing selected');
-          this.showErrorDialog();
+          this.errorMsg = 'Please select a transaction.'
+          this.showErrorDialog(this.errorMsg);
         }
       },
     },
@@ -131,7 +138,8 @@ export class AppComponent implements OnInit {
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
-          this.showErrorDialog();
+          this.errorMsg = 'Please select a transaction.'
+          this.showErrorDialog(this.errorMsg);
         }
       },
     },
@@ -150,6 +158,7 @@ export class AppComponent implements OnInit {
   authenticated = false;
   visible2: boolean = false;
   userData: any;
+  errorMsg: any;
   dbTransactions: { income: any[]; expense: any[] };
 
   constructor(
@@ -193,6 +202,11 @@ export class AppComponent implements OnInit {
         }
       }
     }
+
+    setTimeout(() => {
+      console.log(this.userData);
+    }, 300);
+
   }
 
   async loadUserData() {
@@ -204,10 +218,15 @@ export class AppComponent implements OnInit {
           this.userData = response.data;
         } else if (response.error) {
           console.error('Error loading profile:', response.error);
+          this.showErrorDialog('Error loading profile: ' + response.error);
         }
       },
     });
     this.getTransactions();
+  }
+
+  toggle(event: any) {
+    this.op.toggle(event);
   }
 
   getTransactions() {
@@ -217,6 +236,7 @@ export class AppComponent implements OnInit {
           this.dbTransactions = response.data;
         } else if (response.error) {
           console.error('Error loading transactions:', response.error);
+          this.showErrorDialog('Error loading transactions: ' + response.error);
         }
       },
     });
@@ -296,8 +316,9 @@ export class AppComponent implements OnInit {
     );
   }
 
-  showErrorDialog() {
+  showErrorDialog(err: any) {
     this.visible2 = true;
+    this.errorMsg = err;
   }
 
   showDialog(transaction: any) {
@@ -323,10 +344,12 @@ export class AppComponent implements OnInit {
     this.userService.addUser(newUser).subscribe(
       (response) => {
         console.log('User added successfully', response);
+        // this.showErrorDialog('User added successfully!');
         alert('User added successfully!');
       },
       (error) => {
         console.error('There was an error adding the user!', error);
+        // this.showErrorDialog('Error adding user');
         alert('Error adding user');
       }
     );
@@ -350,6 +373,7 @@ export class AppComponent implements OnInit {
           },
           error: (err: any) => {
             console.error('Error adding transaction', err);
+            this.showErrorDialog('Error adding transaction' + err);
           },
         });
       }
@@ -362,6 +386,7 @@ export class AppComponent implements OnInit {
         this.selectedTransaction = null;
       }, error => {
         console.error('Error updating transaction:', error);
+        this.showErrorDialog('Error updating transaction' + error);
       });
 
     }else{
@@ -372,6 +397,7 @@ export class AppComponent implements OnInit {
         this.selectedTransaction = null;
       }, error => {
         console.error('Error deleting transaction:', error);
+        this.showErrorDialog('Error deleting transaction' + error);
       });
     }
     this.transactionForm.reset();
