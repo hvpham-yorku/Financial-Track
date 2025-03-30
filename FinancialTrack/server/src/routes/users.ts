@@ -5,9 +5,18 @@ import { validateUser } from "../middleware";
 
 const UserRoute = Router();
 
+// Adds "user" type to the express Request
+import { JwtPayload } from "jsonwebtoken";
+declare module "express-serve-static-core" {
+  interface Request {
+    user: JwtPayload;
+  }
+}
+
 UserRoute.use(validateUser);
 
 UserRoute.get("/", async (req: Request, res: Response) => {
+  console.log("/USERS", req);
   try {
     const userId = req.user.id as number;
     // Check if user exists
@@ -19,7 +28,7 @@ UserRoute.get("/", async (req: Request, res: Response) => {
     res.status(201).json({ data: { username: user.username }, error: null });
     return;
   } catch (error) {
-    res.status(500).json({ data: [], error: "Internal server error" });
+    res.status(500).json({ data: null, error: "Internal server error" });
     return;
   }
 });

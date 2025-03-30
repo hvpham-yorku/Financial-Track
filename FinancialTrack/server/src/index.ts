@@ -20,7 +20,7 @@ app.use("/auth", AuthRoute);
 app.use("/transactions", TransactionsRoute);
 app.use("/budget", BudgetRoute);
 
-app.get("/users", UserRoute);
+app.use("/users", UserRoute);
 
 app.listen(Config.PORT, () => {
   console.log(`[server]: Server is running at http://localhost:${Config.PORT}`);
