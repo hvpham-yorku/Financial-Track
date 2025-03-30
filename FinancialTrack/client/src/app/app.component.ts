@@ -203,10 +203,6 @@ export class AppComponent implements OnInit {
       }
     }
 
-    setTimeout(() => {
-      console.log(this.userData);
-    }, 300);
-
   }
 
   async loadUserData() {
@@ -218,7 +214,7 @@ export class AppComponent implements OnInit {
           this.userData = response.data;
         } else if (response.error) {
           console.error('Error loading profile:', response.error);
-          this.showErrorDialog('Error loading profile: ' + response.error);
+          this.showErrorDialog('Oops! ' + response.error);
         }
       },
     });
