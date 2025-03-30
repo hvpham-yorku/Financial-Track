@@ -1,7 +1,7 @@
 <div *ngIf="!authenticated">
   <router-outlet></router-outlet>
 </div>
-<div class="dashboard">
+<div class="dashboard" *ngIf="authenticated">
   <div class="card">
     <p-menubar [model]="items"  class="static-menubar">
       <ng-template #start>
@@ -28,9 +28,9 @@
             </p-popover>
           </div>
       </ng-template>
-  </p-menubar>
+    </p-menubar>
   </div>
-  <div class="main" *ngIf="authenticated">
+  <div class="main">
     <div class="tabs-container">
       <p-tabs [(value)]="selectedTab">
         <p-tablist>
