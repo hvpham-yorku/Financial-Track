@@ -50,10 +50,11 @@ TransactionsRoute.get(
 );
 
 TransactionsRoute.get(
-  "/month",
+  "/month/[month]",
   async (req: UserAuthInfoRequest, res: Response) => {
     try {
       const userId = req.user.id as number;
+      const month = req.params.month;
       // Check if user exists
       const user = await User.findByPk(userId);
       if (!user) {
@@ -64,7 +65,7 @@ TransactionsRoute.get(
       // Get the transactions
       const transactions = await Transaction.getTransactionsByMonth(
         user.id,
-        req.body.month
+        month
       );
       res.status(201).json({ data: transactions, error: null });
       return;
@@ -74,8 +75,8 @@ TransactionsRoute.get(
     }
   }
 );
-TransactionsRoute.post(
-  "/week",
+TransactionsRoute.get(
+  "/week/[date]",
   async (req: UserAuthInfoRequest, res: Response) => {
     try {
       const userId = req.user.id as number;
@@ -89,7 +90,7 @@ TransactionsRoute.post(
       // Get the transactions
       const transactions = await Transaction.getTransactionsByWeek(
         user.id,
-        new Date(req.body.date)
+        new Date(req.params.date)
       );
       res.status(201).json({ data: transactions, error: null });
       return;

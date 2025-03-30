@@ -75,7 +75,18 @@ Server response:
 }
 ```
 
-### GET /transactions/month
+### GET /transactions/month/[month]
+
+Server response:
+
+```typescript
+{
+  data: Transaction[];
+  error: string | null;
+}
+```
+
+### GET /transactions/week/[week]
 
 Server response:
 
