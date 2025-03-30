@@ -33,12 +33,11 @@ export class UserService {
 
   updateTransaction(formData: any) {
     const token = localStorage.getItem('jwt_token');
-  
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     });
-  
+
     return this.http.patch<any>(`${this.baseUrl}/transactions/edit`, formData, {
       headers,
     });
@@ -46,17 +45,15 @@ export class UserService {
 
   deleteTransaction(id: number) {
     const token = localStorage.getItem('jwt_token');
-  
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     });
-  
     return this.http.delete<any>(`${this.baseUrl}/transactions/delete`, {
       headers,
       body: { id },
     });
-  }  
+  }
 
   getTransactions() {
     const token = localStorage.getItem('jwt_token');

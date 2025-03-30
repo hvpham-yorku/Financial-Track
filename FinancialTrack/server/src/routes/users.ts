@@ -16,7 +16,6 @@ declare module "express-serve-static-core" {
 UserRoute.use(validateUser);
 
 UserRoute.get("/", async (req: Request, res: Response) => {
-  console.log("/USERS", req);
   try {
     const userId = req.user.id as number;
     // Check if user exists

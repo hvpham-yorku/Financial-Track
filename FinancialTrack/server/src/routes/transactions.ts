@@ -50,9 +50,10 @@ TransactionsRoute.get(
 );
 
 TransactionsRoute.get(
-  "/month/[month]",
+  "/month/:month",
   async (req: UserAuthInfoRequest, res: Response) => {
     try {
+      console.log("MONTH");
       const userId = req.user.id as number;
       const month = req.params.month;
       // Check if user exists
@@ -76,7 +77,7 @@ TransactionsRoute.get(
   }
 );
 TransactionsRoute.get(
-  "/week/[date]",
+  "/week/:date",
   async (req: UserAuthInfoRequest, res: Response) => {
     try {
       const userId = req.user.id as number;

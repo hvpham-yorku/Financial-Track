@@ -1,4 +1,10 @@
-import { Component, OnInit, PLATFORM_ID, Inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  PLATFORM_ID,
+  Inject,
+  ViewChild,
+} from '@angular/core';
 import { UserService } from './services/user.service';
 import { User } from './models/user.model';
 import { HttpClientModule } from '@angular/common/http';
@@ -124,7 +130,7 @@ export class AppComponent implements OnInit {
           this.showDialog(this.selectedTransaction);
         } else {
           console.log('Nothing selected');
-          this.errorMsg = 'Please select a transaction.'
+          this.errorMsg = 'Please select a transaction.';
           this.showErrorDialog(this.errorMsg);
         }
       },
@@ -138,7 +144,7 @@ export class AppComponent implements OnInit {
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
-          this.errorMsg = 'Please select a transaction.'
+          this.errorMsg = 'Please select a transaction.';
           this.showErrorDialog(this.errorMsg);
         }
       },
@@ -202,7 +208,6 @@ export class AppComponent implements OnInit {
         }
       }
     }
-
   }
 
   async loadUserData() {
@@ -254,8 +259,8 @@ export class AppComponent implements OnInit {
     return this.labl == 'Delete'
       ? 'Delete'
       : this.labl == 'Update'
-        ? 'Update'
-        : 'Save';
+      ? 'Update'
+      : 'Save';
   }
 
   get filteredTransactions() {
@@ -325,7 +330,7 @@ export class AppComponent implements OnInit {
       tag: transaction?.tag || '',
       type: transaction?.type || '',
       createdAt: transaction?.createdAt || '',
-      id: transaction.id
+      id: transaction.id,
     });
     this.visible = true;
   }
@@ -358,7 +363,6 @@ export class AppComponent implements OnInit {
     formData.amount = Number(formData.amount);
     // console.log(formData, this.transactionForm);
     if (this.labl == 'Add') {
-
       if (this.transactionForm.valid) {
         const { id, ...dataWithoutId } = formData;
         this.userService.addTransaction(dataWithoutId).subscribe({
@@ -373,28 +377,30 @@ export class AppComponent implements OnInit {
           },
         });
       }
-
-    }else if(this.labl == 'Update'){
-
-      this.userService.updateTransaction(formData).subscribe(response => {
-        console.log('Transaction updated successfully:', response);
-        this.getTransactions();
-        this.selectedTransaction = null;
-      }, error => {
-        console.error('Error updating transaction:', error);
-        this.showErrorDialog('Error updating transaction' + error);
-      });
-
-    }else{
-
-      this.userService.deleteTransaction(formData.id).subscribe(response => {
-        console.log('Transaction deleted successfully:', response);
-        this.getTransactions();
-        this.selectedTransaction = null;
-      }, error => {
-        console.error('Error deleting transaction:', error);
-        this.showErrorDialog('Error deleting transaction' + error);
-      });
+    } else if (this.labl == 'Update') {
+      this.userService.updateTransaction(formData).subscribe(
+        (response) => {
+          console.log('Transaction updated successfully:', response);
+          this.getTransactions();
+          this.selectedTransaction = null;
+        },
+        (error) => {
+          console.error('Error updating transaction:', error);
+          this.showErrorDialog('Error updating transaction' + error);
+        }
+      );
+    } else {
+      this.userService.deleteTransaction(formData.id).subscribe(
+        (response) => {
+          console.log('Transaction deleted successfully:', response);
+          this.getTransactions();
+          this.selectedTransaction = null;
+        },
+        (error) => {
+          console.error('Error deleting transaction:', error);
+          this.showErrorDialog('Error deleting transaction' + error);
+        }
+      );
     }
     this.transactionForm.reset();
     this.visible = false;
