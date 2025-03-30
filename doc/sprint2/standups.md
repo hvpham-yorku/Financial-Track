@@ -41,3 +41,22 @@
 **5. Next Meeting:**
 - The next standup meeting will be held on **Sunday, March 30, 2025, at 6:00 PM** for a quick check-in.
 
+## Sprint #2 Standup - March 28, 2025 (6:00 PM - 6:10 PM)
+
+**1. What did you work on since the last standup?**
+- **Backend (Matt, Kwangmin, Daniel):** The backend team continued refining the budget-related code. Everything is progressing well, and we’re ready for integration.
+- **Frontend:** We checked the frontend work today. The frontend team was unavailable for the last meeting, but everything looks good now and is ready for integration.
+
+**2. What do you commit to next?**
+- **Backend:** The backend team is ready to move forward with integration and testing.
+- **Frontend:** The frontend team will also ready for the integration and testing phase.
+
+**3. When do you think you'll be done?**
+- We’re aiming to complete the integration and testing phase in the upcoming days, depending on how things progress.
+
+**4. Do you have any blockers or challenges?**
+- No blockers at the moment. Both backend and frontend are ready for the integration phase.
+
+**5. Next Meeting:**
+- The next standup will be held on **Monday, March 31, 2025, at 10:30 PM** for the next check-in.
+
