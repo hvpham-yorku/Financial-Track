@@ -1,0 +1,17 @@
+.main{
+    font-family: 'Montserrat', sans-serif;
+    width: 70%;
+    padding-top: 6rem;
+    margin: auto;
+}
+
+.header{
+    text-align: center;
+}
+.month{
+    margin-bottom: 2.5rem;
+}
+
+.btn{
+    margin-top: 2rem;
+}

@@ -8,7 +8,9 @@ import { User } from '../models/user.model';
 })
 export class UserService {
   private baseUrl = 'http://localhost:3000';
-
+  public tab: any;
+  public selectedWeeklyDate:any;
+  public selectedMonthlyDate:any;
   constructor(private http: HttpClient) {}
 
   addUser(user: User): Observable<User> {
@@ -62,6 +64,28 @@ export class UserService {
       Authorization: `Bearer ${token}`,
     });
     return this.http.get<any>(`${this.baseUrl}/transactions/all-split`, {
+      headers,
+    });
+  }
+
+  getTransactionsByMonth(date : any) {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<any>(`${this.baseUrl}/transactions/month/${date}`, {
+      headers,
+    });
+  }
+
+  getTransactionsByWeek(date : any) {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<any>(`${this.baseUrl}/transactions/week/${date}`, {
       headers,
     });
   }

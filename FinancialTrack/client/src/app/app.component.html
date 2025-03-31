@@ -13,8 +13,7 @@
             <p-popover #op>
                 <div class="flex flex-col gap-4">
                     <div>
-                        <p>Name: userData.username </p>
-                        <p>Email: userData.email</p>
+                        <p>Welcome {{userData.username}}! </p>
                     </div>
                     <div class="logout-container">
                       <p-button
@@ -30,7 +29,7 @@
       </ng-template>
     </p-menubar>
   </div>
-  <div class="main">
+  <div class="main" *ngIf="!table">
     <div class="tabs-container">
       <p-tabs [(value)]="selectedTab">
         <p-tablist>
@@ -42,6 +41,7 @@
             <p-datepicker
               class="max-w-full"
               [(ngModel)]="monthlyDate"
+              (ngModelChange)="onMonthlyDateChange($event)"
               [inline]="true"
               [showWeek]="true"
             />
@@ -68,8 +68,9 @@
         />
         <label for="in_label">Date</label>
         <p-panel header="Monthly:" [toggleable]="true">
-          <p class="m-0">Total Income: ${{ totalIncome.toFixed(2) }}</p>
-          <p class="m-0">Total Expense: ${{ totalExpense.toFixed(2) }}</p>
+          <p class="m-0">Total Income: ${{ monthlyTotalIncome.toFixed(2) }}</p>
+          <p class="m-0">Total Expense: ${{ monthlyTotalExpense.toFixed(2) }}</p>
+          <p class="m-0">Net Total: ${{ monthlyNetTotal.toFixed(2) }}</p>
           <h4>Expense:</h4>
           <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
             <!-- <p class="m-0" *ngFor="let expense of expenses">
@@ -135,12 +136,14 @@
         </p-panel>
   
         <div class="button-wrapper">
+          <p-button label="See all transactions" severity="secondary" (onClick)="getTransactionsBy()"/>
           <p-splitbutton label="Actions" [model]="actions" />
         </div>
       </p-floatlabel>
       <p-floatlabel variant="in" *ngIf="selectedTab === '1'">
         <p-datepicker
           [(ngModel)]="weeklyDate"
+          (ngModelChange)="onWeeklyDateChange($event)"
           inputId="in_label"
           showIcon
           iconDisplay="input"
@@ -148,9 +151,10 @@
         />
         <label for="in_label">Date</label>
   
-        <p-panel header="Weekly:" [toggleable]="true">
-          <p class="m-0">Total Income: ${{ totalIncome.toFixed(2) }}</p>
-          <p class="m-0">Total Expense: ${{ totalExpense.toFixed(2) }}</p>
+        <p-panel  header="Weekly:" [toggleable]="true">
+          <p class="m-0">Total Income: ${{ weeklyTotalIncome.toFixed(2) }}</p>
+          <p class="m-0">Total Expense: ${{ weeklyTotalExpense.toFixed(2) }}</p>
+          <p class="m-0">Total Expense: ${{ weeklyNetTotal.toFixed(2) }}</p>
           <h4>Expense:</h4>
           <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
             <!-- <p class="m-0" *ngFor="let expense of expenses">
@@ -216,12 +220,13 @@
         </p-panel>
   
         <div class="button-wrapper">
+          <p-button label="See all transactions" severity="secondary" (onClick)="getTransactionsBy()" />
           <p-splitbutton label="Actions" [model]="actions" />
         </div>
       </p-floatlabel>
     </div>
   </div>
-  <div class="card flex justify-center">
+  <div class="card flex justify-center" *ngIf="!table">
     <p-dialog
       header="{{ act }}"
       [modal]="true"
@@ -330,4 +335,7 @@
       </form>
     </p-dialog>
   </div>
+</div>
+<div class="table" *ngIf="table">
+  <app-table></app-table>
 </div>
