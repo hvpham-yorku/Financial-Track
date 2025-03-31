@@ -92,7 +92,7 @@ export class AppComponent implements OnInit {
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
-          console.log('Nothing selected');
+          // console.log('Nothing selected');
           this.errorMsg = 'Please select a transaction.'
           this.showErrorDialog(this.errorMsg);
         }
@@ -183,7 +183,7 @@ export class AppComponent implements OnInit {
     this.userService.getProfile().subscribe({
       next: (response) => {
         if (response.data) {
-          console.log('User profile loaded:', response.data);
+          // console.log('User profile loaded:', response.data);
           this.userData = response.data;
         } else if (response.error) {
           console.error('Error loading profile:', response.error);
@@ -230,7 +230,7 @@ export class AppComponent implements OnInit {
       next: (response) => {
         if (response.data) {
           this.transactions = response.data;
-          console.log(this.transactions);
+          // console.log(this.transactions);
         } else if (response.error) {
           console.error('Error loading transactions:', response.error);
         }
@@ -353,7 +353,7 @@ export class AppComponent implements OnInit {
       next: (response) => {
         if (response.data) {
           this.weeklyTransactions = response.data;
-          console.log(this.transactions);
+          // console.log(this.transactions);
         } else if (response.error) {
           console.error('Error loading transactions:', response.error);
         }
@@ -401,10 +401,10 @@ export class AppComponent implements OnInit {
 
   addUser() {
     const newUser = new User(this.username, this.password);
-    console.log(newUser);
+    // console.log(newUser);
     this.userService.addUser(newUser).subscribe(
       (response) => {
-        console.log('User added successfully', response);
+        // console.log('User added successfully', response);
         // this.showErrorDialog('User added successfully!');
         alert('User added successfully!');
       },
@@ -428,7 +428,7 @@ export class AppComponent implements OnInit {
         const { id, ...dataWithoutId } = formData;
         this.userService.addTransaction(dataWithoutId).subscribe({
           next: (response: any) => {
-            console.log('Transaction added successfully', response);
+            // console.log('Transaction added successfully', response);
             // Refresh transactions
             this.getTransactions();
             this.getTransactionsByMonth(this.monthlyDate);
@@ -443,7 +443,7 @@ export class AppComponent implements OnInit {
     }else if(this.labl == 'Update'){
 
       this.userService.updateTransaction(formData).subscribe(response => {
-        console.log('Transaction updated successfully:', response);
+        // console.log('Transaction updated successfully:', response);
         this.getTransactions();
         this.getTransactionsByMonth(this.monthlyDate);
         this.selectedTransaction = null;
@@ -455,7 +455,7 @@ export class AppComponent implements OnInit {
     }else{
 
       this.userService.deleteTransaction(formData.id).subscribe(response => {
-        console.log('Transaction deleted successfully:', response);
+        // console.log('Transaction deleted successfully:', response);
         this.getTransactions();
         this.getTransactionsByMonth(this.monthlyDate);
         this.selectedTransaction = null;

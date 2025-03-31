@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
 import { UserService } from '../../services/user.service';
 import { DatePicker } from 'primeng/datepicker';
@@ -8,10 +8,11 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from "primeng/button";
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ChartModule } from 'primeng/chart';
 
 @Component({
   selector: 'app-table',
-  imports: [TableModule, BadgeModule, CommonModule, InputNumberModule, DatePicker, ButtonModule, FormsModule],
+  imports: [TableModule, ChartModule, BadgeModule, CommonModule, InputNumberModule, DatePicker, ButtonModule, FormsModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
@@ -27,12 +28,15 @@ export class TableComponent {
     monthName:any;
     tab:any;
     week:any;
-
+    options: any;
+    rawTransactions: any;
+    chartData: any;
 
     constructor(
         private userService: UserService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private cd: ChangeDetectorRef
     ) {}
 
     ngOnInit(){
@@ -43,6 +47,7 @@ export class TableComponent {
         this.date = this.userService.selectedWeeklyDate;
       }
       this.getTransactionsByMon(this.date);
+      this.getTransactions();
       this.week = this.getWeekNumber(this.date) - 1;
     }
   
@@ -52,6 +57,8 @@ export class TableComponent {
         next: (response) => {
           if (response.data) {
             this.transactions = response.data;
+            // this.rawTransactions = response.data;
+            // console.log(this.rawTransactions);
             if (this.tab === "1") {
               const { startOfWeek, endOfWeek } = this.getWeekRange(cDate);
     
@@ -60,7 +67,20 @@ export class TableComponent {
                 return created >= startOfWeek && created <= endOfWeek;
               });
             }
-            console.log(this.transactions);
+          } else if (response.error) {
+            console.error('Error loading transactions:', response.error);
+          }
+        },
+      });
+    }
+
+    getTransactions() {   
+      this.userService.getTransactions().subscribe({
+        next: (response) => {
+          if (response.data) {
+            this.rawTransactions = response.data;
+            // console.log(this.rawTransactions);
+            this.initChart();
           } else if (response.error) {
             console.error('Error loading transactions:', response.error);
           }
@@ -110,7 +130,7 @@ export class TableComponent {
     }
 
     onDateSelect(event: any) {
-      console.log('Selected Date:', event);
+      // console.log('Selected Date:', event);
       this.mm = event.getMonth();
       this.monthName = this.getMonthName(this.mm);
       this.getTransactionsByMon(event);
@@ -128,5 +148,185 @@ export class TableComponent {
       this.router.navigate(['/dashboard'], { queryParams: { table: false } });
     }
 
-
+    // initChart() {
+    //   const documentStyle = getComputedStyle(document.documentElement);
+    //   const textColor = documentStyle.getPropertyValue('--p-text-color');
+    //   const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
+    //   const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
+    
+    //   const grouped: { [month: string]: { income: number; expense: number } } = {};
+    
+    //   if (!this.rawTransactions || !Array.isArray(this.rawTransactions)) return;
+    
+    //   this.rawTransactions.forEach((t: any) => {
+    //     const date = new Date(t.createdAt);
+    //     const monthKey = date.toLocaleString('default', { month: 'short' });
+    
+    //     if (!grouped[monthKey]) {
+    //       grouped[monthKey] = { income: 0, expense: 0 };
+    //     }
+    
+    //     grouped[monthKey][t.type as 'income' | 'expense'] += t.amount;
+    //   });
+    
+    //   const labels = Object.keys(grouped);
+    //   const incomeData = labels.map(label => grouped[label].income);
+    //   const expenseData = labels.map(label => grouped[label].expense);
+    
+    //   this.chartData = {
+    //     labels,
+    //     datasets: [
+    //       {
+    //         type: 'bar',
+    //         label: 'Income',
+    //         backgroundColor: documentStyle.getPropertyValue('--p-green-500'),
+    //         data: incomeData
+    //       },
+    //       {
+    //         type: 'bar',
+    //         label: 'Expense',
+    //         backgroundColor: documentStyle.getPropertyValue('--p-pink-500'),
+    //         data: expenseData
+    //       }
+    //     ]
+    //   };
+    
+    //   this.options = {
+    //     maintainAspectRatio: false,
+    //     aspectRatio: 0.8,
+    //     plugins: {
+    //       tooltip: {
+    //         mode: 'index',
+    //         intersect: false
+    //       },
+    //       legend: {
+    //         labels: {
+    //           color: textColor
+    //         }
+    //       }
+    //     },
+    //     scales: {
+    //       x: {
+    //         stacked: true,
+    //         ticks: {
+    //           color: textColorSecondary
+    //         },
+    //         grid: {
+    //           color: surfaceBorder,
+    //           drawBorder: false
+    //         }
+    //       },
+    //       y: {
+    //         stacked: true,
+    //         ticks: {
+    //           color: textColorSecondary
+    //         },
+    //         grid: {
+    //           color: surfaceBorder,
+    //           drawBorder: false
+    //         }
+    //       }
+    //     }
+    //   };
+    
+    //   this.cd.markForCheck();
+    // }
+    initChart() {
+      const documentStyle = getComputedStyle(document.documentElement);
+      const textColor = documentStyle.getPropertyValue('--p-text-color');
+      const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
+      const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
+    
+      const grouped: { [month: string]: { income: number; expense: number } } = {};
+    
+      if (!this.rawTransactions || !this.rawTransactions.income || !this.rawTransactions.expense) return;
+    
+      const allTransactions = [...this.rawTransactions.income, ...this.rawTransactions.expense];
+    
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth(); // 0-indexed
+    
+      // Init all months up to current month
+      for (let i = 0; i <= currentMonth; i++) {
+        const date = new Date(currentYear, i, 1);
+        const monthKey = date.toLocaleString('default', { month: 'short' });
+        grouped[monthKey] = { income: 0, expense: 0 };
+      }
+    
+      // Fill data
+      allTransactions.forEach((t: any) => {
+        const date = new Date(t.createdAt);
+        const monthKey = date.toLocaleString('default', { month: 'short' });
+    
+        if (!grouped[monthKey]) {
+          grouped[monthKey] = { income: 0, expense: 0 };
+        }
+    
+        grouped[monthKey][t.type as 'income' | 'expense'] += t.amount;
+      });
+    
+      const labels = Object.keys(grouped);
+      const incomeData = labels.map(label => grouped[label].income);
+      const expenseData = labels.map(label => grouped[label].expense);
+    
+      this.chartData = {
+        labels,
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Income',
+            backgroundColor: documentStyle.getPropertyValue('--p-green-500'),
+            data: incomeData
+          },
+          {
+            type: 'bar',
+            label: 'Expense',
+            backgroundColor: documentStyle.getPropertyValue('--p-pink-500'),
+            data: expenseData
+          }
+        ]
+      };
+    
+      this.options = {
+        maintainAspectRatio: false,
+        aspectRatio: 0.8,
+        plugins: {
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          },
+          legend: {
+            labels: {
+              color: textColor
+            }
+          }
+        },
+        scales: {
+          x: {
+            stacked: true,
+            ticks: {
+              color: textColorSecondary
+            },
+            grid: {
+              color: surfaceBorder,
+              drawBorder: false
+            }
+          },
+          y: {
+            stacked: true,
+            ticks: {
+              color: textColorSecondary
+            },
+            grid: {
+              color: surfaceBorder,
+              drawBorder: false
+            }
+          }
+        }
+      };
+    
+      this.cd.markForCheck();
+    }
+    
 }

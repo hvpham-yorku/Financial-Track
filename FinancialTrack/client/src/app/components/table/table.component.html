@@ -1,6 +1,9 @@
 <div class="card main">
     <ng-container *ngIf="tab == '0'">
       <h1 class="header">TRANSACTIONS</h1>  
+      <div class="card wid">
+        <p-chart type="bar" [data]="chartData" [options]="options" class="h-[30rem]" />
+      </div>      
       <div class="card flex justify-center month">
         <h3>Month: </h3>
         <p-datepicker [(ngModel)]="date" 
