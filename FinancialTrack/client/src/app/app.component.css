@@ -60,6 +60,14 @@ p-button {
   text-align: center;
 }
 
+.foot{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
 .financial-heading {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.25rem;
