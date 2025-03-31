@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  PLATFORM_ID,
-  Inject,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject, ViewChild } from '@angular/core';
 import { UserService } from './services/user.service';
 import { User } from './models/user.model';
 import { HttpClientModule } from '@angular/common/http';
@@ -27,6 +21,7 @@ import { RouterOutlet, Router, ActivatedRoute } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { Popover, PopoverModule } from 'primeng/popover';
+import { TableComponent } from "./components/table/table.component";
 
 @Component({
   selector: 'app-root',
@@ -53,7 +48,8 @@ import { Popover, PopoverModule } from 'primeng/popover';
     RouterOutlet,
     NgIf,
     PopoverModule,
-  ],
+    TableComponent
+],
   providers: [UserService],
 })
 export class AppComponent implements OnInit {
@@ -73,41 +69,8 @@ export class AppComponent implements OnInit {
   labl: any;
   @ViewChild('op') op!: Popover;
 
-  transactions: any = [
-    {
-      id: 1,
-      amount: 220.0,
-      title: 'Work',
-      tag: 'Work',
-      type: 'income',
-      createdAt: '2025-03-17',
-    },
-    {
-      id: 2,
-      amount: 50.0,
-      title: 'Tip',
-      tag: 'Work',
-      type: 'income',
-      createdAt: '2025-03-17',
-    },
-    {
-      id: 3,
-      amount: 56.0,
-      title: 'Shop',
-      tag: 'Grocery',
-      type: 'expense',
-      createdAt: '2025-03-17',
-    },
-    {
-      id: 4,
-      amount: 34.0,
-      title: 'Pet',
-      tag: 'Grocery',
-      type: 'expense',
-      createdAt: '2025-03-17',
-    },
-  ];
-
+  transactions: any;
+  weeklyTransactions:any;
   items: MenuItem[] | undefined;
 
   actions = [
@@ -130,7 +93,7 @@ export class AppComponent implements OnInit {
           this.showDialog(this.selectedTransaction);
         } else {
           console.log('Nothing selected');
-          this.errorMsg = 'Please select a transaction.';
+          this.errorMsg = 'Please select a transaction.'
           this.showErrorDialog(this.errorMsg);
         }
       },
@@ -144,7 +107,7 @@ export class AppComponent implements OnInit {
         if (this.selectedTransaction) {
           this.showDialog(this.selectedTransaction);
         } else {
-          this.errorMsg = 'Please select a transaction.';
+          this.errorMsg = 'Please select a transaction.'
           this.showErrorDialog(this.errorMsg);
         }
       },
@@ -166,6 +129,7 @@ export class AppComponent implements OnInit {
   userData: any;
   errorMsg: any;
   dbTransactions: { income: any[]; expense: any[] };
+  table = false;
 
   constructor(
     private userService: UserService,
@@ -192,7 +156,11 @@ export class AppComponent implements OnInit {
         this.loadUserData();
       }
     });
-
+    this.route.queryParams.subscribe((params) => {
+      if (params['table'] !== undefined) {
+        this.table = params['table'] === 'true';
+      }
+    });
     // Check if token exists in localStorage (only in browser)
     if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('jwt_token');
@@ -224,6 +192,7 @@ export class AppComponent implements OnInit {
       },
     });
     this.getTransactions();
+    this.getTransactionsByMonth(this.monthlyDate);
   }
 
   toggle(event: any) {
@@ -243,11 +212,38 @@ export class AppComponent implements OnInit {
     });
   }
 
+  toggleTableVisibility() {
+    this.table = !this.table;
+  }
+
+  getTransactionsBy() {
+    this.toggleTableVisibility();
+    this.userService.tab = this.selectedTab;
+    this.userService.selectedWeeklyDate = this.weeklyDate;
+    this.userService.selectedMonthlyDate = this.monthlyDate;
+    this.router.navigate(['/all-transactions']);
+  }
+
+  getTransactionsByMonth(cDate: any) {
+    const month = cDate.toLocaleString('default', { month: '2-digit' });   
+    this.userService.getTransactionsByMonth(month).subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.transactions = response.data;
+          console.log(this.transactions);
+        } else if (response.error) {
+          console.error('Error loading transactions:', response.error);
+        }
+      },
+    });
+  }
+
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('jwt_token');
     }
     this.authenticated = false;
+    this.table = false;
     this.router.navigate(['/login']);
   }
 
@@ -259,8 +255,8 @@ export class AppComponent implements OnInit {
     return this.labl == 'Delete'
       ? 'Delete'
       : this.labl == 'Update'
-      ? 'Update'
-      : 'Save';
+        ? 'Update'
+        : 'Save';
   }
 
   get filteredTransactions() {
@@ -272,23 +268,24 @@ export class AppComponent implements OnInit {
     );
   }
 
-  get filteredExpenses() {
-    const selectedDate = this.formatDate(
-      this.selectedTab === '0' ? this.monthlyDate : this.weeklyDate
-    );
-    return this.dbTransactions.expense.filter(
-      (t: { createdAt: string }) =>
-        this.formatDate(new Date(t.createdAt)) === selectedDate
-    );
-  }
   get filteredIncomes() {
-    const selectedDate = this.formatDate(
-      this.selectedTab === '0' ? this.monthlyDate : this.weeklyDate
-    );
-    return this.dbTransactions.income.filter(
-      (t: { createdAt: string }) =>
-        this.formatDate(new Date(t.createdAt)) === selectedDate
-    );
+    return this.transactions?.filter((t: any) => {
+      if (t.type !== 'income') return false;
+      const created = new Date(t.createdAt);
+      return this.selectedTab === '0'
+        ? this.formatDate(created) === this.formatDate(this.monthlyDate)
+        : this.isSameWeek(created, this.weeklyDate);
+    }) ?? [];
+  }
+  
+  get filteredExpenses() {
+    return this.transactions?.filter((t: any) => {
+      if (t.type !== 'expense') return false;
+      const created = new Date(t.createdAt);
+      return this.selectedTab === '0'
+        ? this.formatDate(created) === this.formatDate(this.monthlyDate)
+        : this.isSameWeek(created, this.weeklyDate);
+    }) ?? [];
   }
 
   get expenses() {
@@ -303,18 +300,81 @@ export class AppComponent implements OnInit {
     );
   }
 
-  get totalExpense() {
-    return this.filteredExpenses.reduce(
-      (sum: any, t: { amount: any }) => sum + t.amount,
-      0
-    );
+  get monthlyTotalIncome(): number {
+    return this.transactions?.filter((t: any) => t.type === 'income')
+      .reduce((sum: number, t: any) => sum + t.amount, 0) ?? 0;
+  }
+  
+  get monthlyTotalExpense(): number {
+    return this.transactions?.filter((t: any) => t.type === 'expense')
+      .reduce((sum: number, t: any) => sum + t.amount, 0) ?? 0;
+  }
+  
+  get monthlyNetTotal(): number {
+    return this.monthlyTotalIncome - this.monthlyTotalExpense;
   }
 
-  get totalIncome() {
-    return this.filteredIncomes.reduce(
-      (sum: any, t: { amount: any }) => sum + t.amount,
-      0
-    );
+  get weeklyTotalIncome(): number {
+    return this.transactions?.filter((t: any) => {
+      const created = new Date(t.createdAt);
+      return t.type === 'income' && this.isSameWeek(created, this.weeklyDate);
+    }).reduce((sum: number, t: any) => sum + t.amount, 0) ?? 0;
+  }
+  
+  get weeklyTotalExpense(): number {
+    return this.transactions?.filter((t: any) => {
+      const created = new Date(t.createdAt);
+      return t.type === 'expense' && this.isSameWeek(created, this.weeklyDate);
+    }).reduce((sum: number, t: any) => sum + t.amount, 0) ?? 0;
+  }
+  
+  get weeklyNetTotal(): number {
+    return this.weeklyTotalIncome - this.weeklyTotalExpense;
+  }
+  
+
+  onMonthlyDateChange(date: Date) {
+    if (date) {
+      this.monthlyDate = date;
+      this.getTransactionsByMonth(this.monthlyDate);
+    }
+  }
+
+  onWeeklyDateChange(date: Date) {
+    if (date) {
+      this.weeklyDate = date;
+      this.getTransactionsByWeek(this.weeklyDate);
+    }
+  }
+
+  getTransactionsByWeek(cDate: any) {
+    const month = cDate.toLocaleString('default', { month: '2-digit' });   
+    this.userService.getTransactionsByWeek(month).subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.weeklyTransactions = response.data;
+          console.log(this.transactions);
+        } else if (response.error) {
+          console.error('Error loading transactions:', response.error);
+        }
+      },
+    });
+  }
+
+  private isSameWeek(date1: Date, date2: Date): boolean {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+  
+    const startOfWeek = (d: Date) => {
+      const day = d.getDay(); // 0 (Sun) to 6 (Sat)
+      const diff = d.getDate() - day;
+      return new Date(d.setDate(diff));
+    };
+  
+    const start1 = startOfWeek(new Date(d1));
+    const start2 = startOfWeek(new Date(d2));
+  
+    return start1.toDateString() === start2.toDateString();
   }
 
   showErrorDialog(err: any) {
@@ -330,7 +390,7 @@ export class AppComponent implements OnInit {
       tag: transaction?.tag || '',
       type: transaction?.type || '',
       createdAt: transaction?.createdAt || '',
-      id: transaction.id,
+      id: transaction.id
     });
     this.visible = true;
   }
@@ -363,6 +423,7 @@ export class AppComponent implements OnInit {
     formData.amount = Number(formData.amount);
     // console.log(formData, this.transactionForm);
     if (this.labl == 'Add') {
+
       if (this.transactionForm.valid) {
         const { id, ...dataWithoutId } = formData;
         this.userService.addTransaction(dataWithoutId).subscribe({
@@ -370,6 +431,7 @@ export class AppComponent implements OnInit {
             console.log('Transaction added successfully', response);
             // Refresh transactions
             this.getTransactions();
+            this.getTransactionsByMonth(this.monthlyDate);
           },
           error: (err: any) => {
             console.error('Error adding transaction', err);
@@ -377,30 +439,30 @@ export class AppComponent implements OnInit {
           },
         });
       }
-    } else if (this.labl == 'Update') {
-      this.userService.updateTransaction(formData).subscribe(
-        (response) => {
-          console.log('Transaction updated successfully:', response);
-          this.getTransactions();
-          this.selectedTransaction = null;
-        },
-        (error) => {
-          console.error('Error updating transaction:', error);
-          this.showErrorDialog('Error updating transaction' + error);
-        }
-      );
-    } else {
-      this.userService.deleteTransaction(formData.id).subscribe(
-        (response) => {
-          console.log('Transaction deleted successfully:', response);
-          this.getTransactions();
-          this.selectedTransaction = null;
-        },
-        (error) => {
-          console.error('Error deleting transaction:', error);
-          this.showErrorDialog('Error deleting transaction' + error);
-        }
-      );
+
+    }else if(this.labl == 'Update'){
+
+      this.userService.updateTransaction(formData).subscribe(response => {
+        console.log('Transaction updated successfully:', response);
+        this.getTransactions();
+        this.getTransactionsByMonth(this.monthlyDate);
+        this.selectedTransaction = null;
+      }, error => {
+        console.error('Error updating transaction:', error);
+        this.showErrorDialog('Error updating transaction' + error);
+      });
+
+    }else{
+
+      this.userService.deleteTransaction(formData.id).subscribe(response => {
+        console.log('Transaction deleted successfully:', response);
+        this.getTransactions();
+        this.getTransactionsByMonth(this.monthlyDate);
+        this.selectedTransaction = null;
+      }, error => {
+        console.error('Error deleting transaction:', error);
+        this.showErrorDialog('Error deleting transaction' + error);
+      });
     }
     this.transactionForm.reset();
     this.visible = false;
