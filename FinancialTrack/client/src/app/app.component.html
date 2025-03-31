@@ -154,7 +154,7 @@
         <p-panel  header="Weekly:" [toggleable]="true">
           <p class="m-0">Total Income: ${{ weeklyTotalIncome.toFixed(2) }}</p>
           <p class="m-0">Total Expense: ${{ weeklyTotalExpense.toFixed(2) }}</p>
-          <p class="m-0">Total Expense: ${{ weeklyNetTotal.toFixed(2) }}</p>
+          <p class="m-0">Net Total: ${{ weeklyNetTotal.toFixed(2) }}</p>
           <h4>Expense:</h4>
           <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
             <!-- <p class="m-0" *ngFor="let expense of expenses">
