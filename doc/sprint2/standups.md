@@ -51,7 +51,7 @@
 
 - The next standup meeting will be held on **Sunday, March 30, 2025, at 6:00 PM** for a quick check-in.
 
-## Sprint #3 Standup - March 30, 2025 (6:00 PM - 6:10 PM)
+## **Standup - March 30, 2025 - Sprint #2 Standup #3 (6:00 PM - 6:20 PM)**
 
 **1. What did you work on since the last standup?**
 
@@ -74,3 +74,23 @@
 **5. Next Meeting:**
 
 - The next standup will be held on **Monday, March 31, 2025, at 10:30 PM** for the next check-in.
+
+## **Standup - March 31, 2025 - Sprint #2 Standup #4 (10:30 AM - 11:00 AM)**
+
+### 1. **What did you work on since the last standup?**
+- We had a team meeting on Discord where we reviewed each other’s work and discussed any necessary changes or updates.
+- All members shared their progress and aligned on the next steps.
+
+### 2. **What do you commit to next?**
+- **All Team Members:** Continue updating the work based on today’s discussions and complete the necessary changes.
+- Final meeting on **Thursday, April 3, 2025, at 7:00 PM** to review progress and prepare for the demo video recording.
+
+### 3. **When do you think you'll be done?**
+- We are targeting to finalize all work by **Thursday, April 3, 2025, 7:00 PM**, in time for the final meeting and demo recording.
+
+### 4. **Do you have any blockers or challenges?**
+- No blockers identified at this point. All team members are aligned on their tasks.
+
+### 5. **Next Meeting:**
+- **Final Meeting on Thursday, April 3, 2025, at 7:00 PM** for progress review and demo video recording.
+
