@@ -11,7 +11,7 @@ import { CardModule } from 'primeng/card';
 
 interface Budget {
   id?: number;
-  category: string;
+  note: string;
   amount: number;
   monthYear: string;
 }
@@ -34,11 +34,13 @@ interface Budget {
 })
 export class BudgetComponent implements OnInit {
   budgets: Budget[] = [];
-  totalIncome: number = 0;
+  totalBudget: number = 0;
   totalExpenses: number = 0;
   remainingBalance: number = 0;
   monthYear: Date = new Date();
-  newExpenseAmount: number = 0; // Changed from null to 0 to fix type error
+  newExpenseAmount: number = 0;
+  currentDate: Date = new Date();
+  showExpenses: boolean = true;
 
   expenseCategories = [
     { name: 'Groceries', icon: 'pi pi-shopping-cart' },
@@ -57,10 +59,15 @@ export class BudgetComponent implements OnInit {
 
   ngOnInit() {
     this.loadBudgets();
+
+    this.budgetService.expensesTotal$.subscribe(total => {
+      this.totalExpenses = total;
+      this.remainingBalance = this.totalBudget - this.totalExpenses;
+    })
   }
 
   loadBudgets() {
-    this.budgetService.getBudgets().subscribe(response => {
+    this.budgetService.getAllBudgets().subscribe(response => {
       if (!response.error) {
         this.budgets = response.data;
         this.calculateTotals();
@@ -72,7 +79,7 @@ export class BudgetComponent implements OnInit {
     if (!category || amount <= 0) return;
 
     const newBudget: Budget = {
-      category,
+      note: category,
       amount,
       monthYear: this.formatMonthYear(this.monthYear)
     };
@@ -87,18 +94,33 @@ export class BudgetComponent implements OnInit {
     });
   }
 
+  updateBudget(budget: Budget) {
+    if (!budget.id) return;
+
+    this.budgetService.updateBudget({
+      id: budget.id,
+      amount: budget.amount,
+      note: budget.note,
+      monthYear: budget.monthYear
+    }).subscribe(() => {
+      this.loadBudgets();
+    });
+  }
+
   deleteBudget(id: number | undefined): void {
     if (id === undefined) return;
 
-    this.budgetService.deleteBudget(id).subscribe(() => {
-      this.budgets = this.budgets.filter(b => b.id !== id);
-      this.calculateTotals();
+    this.budgetService.deleteBudget(id).subscribe(response => {
+      if (!response.error) {
+        this.budgets = this.budgets.filter(b => b.id !== id);
+        this.calculateTotals();
+      }
     });
   }
 
   calculateTotals() {
-    this.totalExpenses = this.budgets.reduce((sum, b) => sum + b.amount, 0);
-    this.remainingBalance = this.totalIncome - this.totalExpenses;
+    this.totalBudget = this.budgets.reduce((sum, b) => sum + b.amount, 0);
+    this.remainingBalance = this.totalBudget - this.totalExpenses;
   }
 
   private formatMonthYear(date: Date): string {

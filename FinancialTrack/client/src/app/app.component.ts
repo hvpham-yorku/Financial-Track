@@ -142,8 +142,8 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    // Highlight: Add AuthService to constructor
     private authService: AuthService,
+    private budgetService: BudgetService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     const today = new Date();
@@ -158,7 +158,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Check if user is authenticated from query params
     this.route.queryParams.subscribe((params) => {
       if (params['authenticated'] === 'true') {
         this.authenticated = true;
@@ -172,7 +171,6 @@ export class AppComponent implements OnInit {
       }
     });
 
-    // Highlight: Updated auth check using AuthService
     if (this.authService.isAuthenticated()) {
       this.authenticated = true;
       this.loadUserData();
@@ -212,6 +210,8 @@ export class AppComponent implements OnInit {
     console.log('Navigate to budget clicked');
     this.showBudget = true;
     this.budgetViewMode = 'options';
+
+    this.budgetService.updateExpensesTotal(this.monthlyTotalExpense);
   }
 
 
@@ -224,6 +224,10 @@ export class AppComponent implements OnInit {
       next: (response) => {
         if (response.data) {
           this.dbTransactions = response.data;
+
+          setTimeout(() => {
+            this.budgetService.updateExpensesTotal(this.monthlyTotalExpense);
+          }, 100);
         } else if (response.error) {
           console.error('Error loading transactions:', response.error);
           this.showErrorDialog('Error loading transactions: ' + response.error);
@@ -250,6 +254,9 @@ export class AppComponent implements OnInit {
       next: (response) => {
         if (response.data) {
           this.transactions = response.data;
+
+          const expenseTotal = this.monthlyTotalExpense;
+          this.budgetService.updateExpensesTotal(expenseTotal);
         } else if (response.error) {
           console.error('Error loading transactions:', response.error);
         }
@@ -261,6 +268,9 @@ export class AppComponent implements OnInit {
     if (date) {
       this.monthlyDate = date;
       this.getTransactionsByMonth(this.monthlyDate);
+      setTimeout(() => {
+        this.budgetService.updateExpensesTotal(this.monthlyTotalExpense);
+      }, 300);
     }
   }
 
@@ -334,6 +344,10 @@ export class AppComponent implements OnInit {
           next: (response: any) => {
             this.getTransactions();
             this.getTransactionsByMonth(this.monthlyDate);
+
+            setTimeout(() => {
+              this.budgetService.updateExpensesTotal(this.monthlyTotalExpense);
+            }, 300);
           },
           error: (err: any) => {
             console.error('Error adding transaction', err);
@@ -346,6 +360,10 @@ export class AppComponent implements OnInit {
         this.getTransactions();
         this.getTransactionsByMonth(this.monthlyDate);
         this.selectedTransaction = null;
+
+        setTimeout(() => {
+          this.budgetService.updateExpensesTotal(this.monthlyTotalExpense);
+        }, 300);
       }, error => {
         console.error('Error updating transaction:', error);
         this.showErrorDialog('Error updating transaction' + error);
@@ -355,6 +373,10 @@ export class AppComponent implements OnInit {
         this.getTransactions();
         this.getTransactionsByMonth(this.monthlyDate);
         this.selectedTransaction = null;
+
+        setTimeout(() => {
+          this.budgetService.updateExpensesTotal(this.monthlyTotalExpense);
+        }, 300);
       }, error => {
         console.error('Error deleting transaction:', error);
         this.showErrorDialog('Error deleting transaction' + error);
