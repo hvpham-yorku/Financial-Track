@@ -28,9 +28,9 @@ interface Budget {
     InputNumberModule,
     DropdownModule,
     ButtonModule,
-    CardModule
+    CardModule,
   ],
-  standalone: true
+  standalone: true,
 })
 export class BudgetComponent implements OnInit {
   budgets: Budget[] = [];
@@ -50,7 +50,7 @@ export class BudgetComponent implements OnInit {
     { name: 'Dining Out', icon: 'pi pi-utensils' },
     { name: 'Healthcare', icon: 'pi pi-heart' },
     { name: 'Shopping', icon: 'pi pi-shopping-bag' },
-    { name: 'Other', icon: 'pi pi-ellipsis-h' }
+    { name: 'Other', icon: 'pi pi-ellipsis-h' },
   ];
 
   newExpenseCategory: any;
@@ -60,10 +60,10 @@ export class BudgetComponent implements OnInit {
   ngOnInit() {
     this.loadBudgets();
 
-    this.budgetService.expensesTotal$.subscribe(total => {
+    this.budgetService.expensesTotal$.subscribe((total) => {
       this.totalExpenses = total;
       this.remainingBalance = this.totalBudget - this.totalExpenses;
-    })
+    });
   }
 
   loadBudgets() {
@@ -81,10 +81,10 @@ export class BudgetComponent implements OnInit {
     const newBudget: Budget = {
       note: category,
       amount,
-      monthYear: this.formatMonthYear(this.monthYear)
+      monthYear: this.formatMonthYear(this.monthYear),
     };
 
-    this.budgetService.addBudget(newBudget).subscribe(response => {
+    this.budgetService.addBudget(newBudget).subscribe((response) => {
       if (!response.error) {
         this.budgets.push(response.data);
         this.calculateTotals();
@@ -97,22 +97,24 @@ export class BudgetComponent implements OnInit {
   updateBudget(budget: Budget) {
     if (!budget.id) return;
 
-    this.budgetService.updateBudget({
-      id: budget.id,
-      amount: budget.amount,
-      note: budget.note,
-      monthYear: budget.monthYear
-    }).subscribe(() => {
-      this.loadBudgets();
-    });
+    this.budgetService
+      .updateBudget({
+        id: budget.id,
+        amount: budget.amount,
+        note: budget.note,
+        monthYear: budget.monthYear,
+      })
+      .subscribe(() => {
+        this.loadBudgets();
+      });
   }
 
   deleteBudget(id: number | undefined): void {
     if (id === undefined) return;
 
-    this.budgetService.deleteBudget(id).subscribe(response => {
+    this.budgetService.deleteBudget(id).subscribe((response) => {
       if (!response.error) {
-        this.budgets = this.budgets.filter(b => b.id !== id);
+        this.budgets = this.budgets.filter((b) => b.id !== id);
         this.calculateTotals();
       }
     });
