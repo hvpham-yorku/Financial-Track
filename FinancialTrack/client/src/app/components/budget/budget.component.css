@@ -1,0 +1,114 @@
+.budget-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: transparent;
+}
+
+.budget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.budget-header h2 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.expense-section h3,
+.add-expense-section h3,
+.summary-section h3 {
+  color: #3b82f6; /* Blue color for section headers */
+  margin-bottom: 1rem;
+}
+
+.expense-table {
+  margin: 1rem 0;
+}
+
+.budget-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.budget-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.category-name {
+  flex: 1;
+  color: #334155; /* Dark gray for category names */
+}
+
+.budget-amount {
+  width: 120px;
+  text-align: right;
+  color: #334155; /* Dark gray for amounts */
+  font-weight: 500;
+}
+
+.delete-btn {
+  width: 40px;
+  color: #ef4444 !important;
+}
+
+.empty-message {
+  text-align: center;
+  color: #64748b; /* Medium gray for empty message */
+  padding: 1rem;
+  font-style: italic;
+}
+
+.add-expense-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.category-dropdown, .amount-input {
+  width: 100%;
+}
+
+.add-button {
+  height: 100%;
+}
+
+.total-budget {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8fafc; /* Very light blue-gray background */
+  border-radius: 8px;
+}
+
+.summary-label {
+  color: #3b82f6; /* Blue color for label */
+  font-weight: 500;
+}
+
+.total-amount {
+  color: #1d4ed8; /* Darker blue for amount */
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .add-expense-form {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
