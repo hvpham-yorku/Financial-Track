@@ -53,7 +53,6 @@ TransactionsRoute.get(
   "/month/:month",
   async (req: UserAuthInfoRequest, res: Response) => {
     try {
-      console.log("MONTH");
       const userId = req.user.id as number;
       const month = req.params.month;
       // Check if user exists
@@ -222,7 +221,6 @@ TransactionsRoute.post("/add", async (req: Request, res: Response) => {
   try {
     const userId = req.user.id as number;
     const payload = req.body as TransactionInsertBody;
-    console.log(payload);
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {

@@ -7,6 +7,7 @@ export default class Budget extends Model {
   declare amount: number;
   declare note: string;
   declare userId: number;
+  declare monthYear: string;
   declare createdAt: string;
   declare updatedAt: string;
 

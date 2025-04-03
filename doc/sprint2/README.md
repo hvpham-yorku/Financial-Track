@@ -1,4 +1,4 @@
-# EECS3311 Project - Sprint 1
+# EECS3311 Project - Sprint 2
 
 ## Team Information
 
@@ -8,7 +8,7 @@
 
 ### Contents
 
-This directory contains Sprint 1 documentation including:
+This directory contains Sprint 2 documentation including:
 
 - Team Agreement
 - Sprint Planning
@@ -17,7 +17,7 @@ This directory contains Sprint 1 documentation including:
 
 ### Getting Started
 
-All documentation related to Sprint 1 can be found in this directory. Please refer to specific files for detailed information about each component.
+All documentation related to Sprint 2 can be found in this directory. Please refer to specific files for detailed information about each component.
 
 ### Team Members
 
@@ -39,13 +39,12 @@ Some key features of our application:
 - Expense Categorization
 - Financial Reporting
 
-### Features Implemented in Sprint 1
+### Features Implemented in Sprint 2
 
-- Account Creation (Sign in/Sign up/Sign out)
-- Add transactions (expense/income)
-- Delete transactions
-- View transactions per day
-- Select and view specific days
+- Users can view their monthly transactions, including both income and expenses, with the ability to filter transactions by date for better organization and analysis.
+- A graphical representation allows users to analyze their income versus expenses, providing a clear view of their financial flow and how much money is being moved each month.
+- Users can create and save new monthly budgets, and view a summary that compares their budget against their actual expenses, helping them stay on track with their financial goals.
+- On the server side, we implemented a new budget model in the database and developed endpoints to enable seamless access and management of budget data.
 
 ## Motivation and Project Description
 
