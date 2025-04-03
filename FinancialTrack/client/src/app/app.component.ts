@@ -68,6 +68,7 @@ export class AppComponent implements OnInit {
   ID = 100;
   showBudget: boolean = false;
   budgetViewMode : 'options' | 'list' | 'form' = 'options';
+  budgetButtonStyle: any = {};
 
   act: string | undefined;
   typeOptions = [
@@ -177,6 +178,18 @@ export class AppComponent implements OnInit {
     } else if (this.router.url.includes('dashboard')) {
       this.router.navigate(['/login']);
     }
+
+    this.budgetService.budgetButtonColor$.subscribe(color => {
+      if(color) {
+        this.budgetButtonStyle = {
+          'background-color': color,
+          'border-color': color,
+          'color' : 'black'
+        };
+      } else {
+        this.budgetButtonStyle = {};
+      }
+    });
   }
 
   // Highlight: Updated logout method to use AuthService
@@ -207,7 +220,6 @@ export class AppComponent implements OnInit {
   }
 
   navigateToBudget() {
-    console.log('Navigate to budget clicked');
     this.showBudget = true;
     this.budgetViewMode = 'options';
 

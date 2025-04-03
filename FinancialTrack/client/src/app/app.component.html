@@ -14,6 +14,7 @@
             icon="pi pi-wallet"
             (onClick)="navigateToBudget()"
             styleClass="p-button-text"
+            [style] = "budgetButtonStyle"
           ></p-button>
             <p-button (onClick)="toggle($event)"><i class="pi pi-user" style="font-size: 1.5rem"></i></p-button>
             <p-popover #op>

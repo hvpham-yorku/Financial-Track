@@ -22,6 +22,9 @@ export class BudgetService {
   private expensesTotalSubject = new BehaviorSubject<number>(0);
   public expensesTotal$ = this.expensesTotalSubject.asObservable();
 
+  private budgetButtonColorSubject = new BehaviorSubject<string>('');
+  budgetButtonColor$ = this.budgetButtonColorSubject.asObservable();
+
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getAuthHeaders(): HttpHeaders {
@@ -80,5 +83,9 @@ export class BudgetService {
         body: { id }
       }
     );
+  }
+
+  updateBudgetButtonColor(color: string): void {
+    this.budgetButtonColorSubject.next(color);
   }
 }
