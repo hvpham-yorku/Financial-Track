@@ -23,13 +23,13 @@ Custom Budget Categories:
 ### 2. Transaction Tracking
 
 Log and categorize transactions to gain insights into your spending habits.
-Smart Transaction Logging
-Detailed entry form with:
-Title - (Pizza)
-Amount - (100)
-Tag - (Food)
-Type (Income/Expense)
-Data tracking
+   - Smart Transaction Logging
+      Detailed entry form with:
+         Title - (Pizza)
+         Amount - (100)
+         Tag - (Food)
+         Type (Income/Expense)
+         Data tracking
 
 ### 3. User Authentication
 
