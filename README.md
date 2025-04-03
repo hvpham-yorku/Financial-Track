@@ -33,17 +33,17 @@ Please ensure you have the following installed:
 - [Git](https://git-scm.com/) - Download and install
 - [Angular CLI](https://angular.dev/tools/cli/setup-local)
 
-```
+```bash
 npm install -g @angular/cli
 ```
 
 To install and set up the project, follow these steps:
 
-1. Clone the repository
+1. **Clone the repository:**
 
 ```bash
-   git clone https://github.com/hvpham-yorku/Financial-Track.git
-   cd Financial-Track
+git clone https://github.com/hvpham-yorku/Financial-Track.git
+cd Financial-Track
 ```
 
 ### Client
@@ -56,17 +56,17 @@ To install and set up the project, follow these steps:
    npm install
 ```
 
-3. **Run the Application**
+3. **Run the Application:**
 
 ```bash
-   ng serve
+ng serve
 ```
 
 The application should now be accessible at http://localhost:4200/.
 
 ### Server
 
-2. **Install dependencies:**
+4. **Install dependencies:**
 
 ```bash
    cd FinancialTrack
@@ -74,24 +74,24 @@ The application should now be accessible at http://localhost:4200/.
    npm install
 ```
 
-3. **Run the Application**
+5. **Run the Application:**
 
 ```bash
-   npm run db-seed # Add mock data to the database
-   npm run dev
+npm run db-seed # Add mock data to the database
+npm run dev
 ```
 
-The application should now be accessible at http://localhost:3000/.
+The application should now be accessible at [http://localhost:3000/](http://localhost:3000/).
 
 ## Team
 
-| Full Name       | Student ID | Email                |
-| --------------- | ---------- | -------------------- |
-| Kwangmin Ryu    | 217233321  | danielry@my.yorku.ca |
-| Jay Patel       | 217548207  | jaym2001@my.yorku.ca |
-| Yashvir Singh   | 217637711  | yash0407@my.yorku.ca |
-| Mathieu Johnson | 220794343  | matj10@my.yorku.ca   |
-| Daniel Prilipko | 214286710  | prilipko@my.yorku.ca |
+| Full Name       | Student ID | Email                  |
+| --------------- | ---------- | ---------------------- |
+| Kwangmin Ryu    | 217233321  | <danielry@my.yorku.ca> |
+| Jay Patel       | 217548207  | <jaym2001@my.yorku.ca> |
+| Yashvir Singh   | 217637711  | <yash0407@my.yorku.ca> |
+| Mathieu Johnson | 220794343  | <matj10@my.yorku.ca>   |
+| Daniel Prilipko | 214286710  | <prilipko@my.yorku.ca> |
 
 ## Contribution
 
