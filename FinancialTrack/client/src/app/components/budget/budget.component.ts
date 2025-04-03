@@ -1,3 +1,4 @@
+import { UpdateBudget } from './../../../../../server/src/models/Budget';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { BudgetService } from '../../services/budget.service';
@@ -8,6 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { Subscription } from 'rxjs';
 
 interface Budget {
   id?: number;
@@ -41,6 +43,7 @@ export class BudgetComponent implements OnInit {
   newExpenseAmount: number = 0;
   currentDate: Date = new Date();
   showExpenses: boolean = true;
+  private expenseSubscription: Subscription | undefined;
 
   expenseCategories = [
     { name: 'Groceries', icon: 'pi pi-shopping-cart' },
@@ -60,17 +63,29 @@ export class BudgetComponent implements OnInit {
   ngOnInit() {
     this.loadBudgets();
 
-    this.budgetService.expensesTotal$.subscribe((total) => {
-      this.totalExpenses = total;
-      this.remainingBalance = this.totalBudget - this.totalExpenses;
+    this.expenseSubscription =this.budgetService.expensesTotal$.subscribe((total) => {
+    this.totalExpenses = total;
+    this.calculateTotals();
+    this.updateBudgetButtonColor();
+
+//this.remainingBalance = this.totalBudget - this.totalExpenses;
+
     });
   }
+
+  ngOnDestroy() {
+    if (this.expenseSubscription) {
+      this.expenseSubscription.unsubscribe();
+    }
+  }
+
 
   loadBudgets() {
     this.budgetService.getAllBudgets().subscribe(response => {
       if (!response.error) {
         this.budgets = response.data;
         this.calculateTotals();
+        this.updateBudgetButtonColor();
       }
     });
   }
@@ -88,6 +103,7 @@ export class BudgetComponent implements OnInit {
       if (!response.error) {
         this.budgets.push(response.data);
         this.calculateTotals();
+        this.updateBudgetButtonColor();
         this.newExpenseCategory = null;
         this.newExpenseAmount = 0;
       }
@@ -116,6 +132,7 @@ export class BudgetComponent implements OnInit {
       if (!response.error) {
         this.budgets = this.budgets.filter((b) => b.id !== id);
         this.calculateTotals();
+        this.updateBudgetButtonColor();
       }
     });
   }
@@ -123,6 +140,26 @@ export class BudgetComponent implements OnInit {
   calculateTotals() {
     this.totalBudget = this.budgets.reduce((sum, b) => sum + b.amount, 0);
     this.remainingBalance = this.totalBudget - this.totalExpenses;
+  }
+
+  updateBudgetButtonColor() {
+    const budgetRatio = this.totalBudget > 0 ? (this.totalExpenses / this.totalBudget) : -1;
+
+    let buttonColor = '';
+
+    if(budgetRatio >= 0) {
+      if(budgetRatio < 0.5) {
+        buttonColor = '#4caf50';
+      } else if(budgetRatio >= 0.5 && budgetRatio <= 0.75) {
+        buttonColor = '#ffc107';
+      } else if(budgetRatio > 0.75) {
+        buttonColor = '#f44336';
+      }
+
+      this.budgetService.updateBudgetButtonColor(buttonColor);
+    } else {
+      this.budgetService.updateBudgetButtonColor('');
+    }
   }
 
   private formatMonthYear(date: Date): string {
