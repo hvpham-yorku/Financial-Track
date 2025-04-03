@@ -50,9 +50,9 @@ export class TableComponent {
       this.getTransactions();
       this.week = this.getWeekNumber(this.date) - 1;
     }
-  
+
     getTransactionsByMon(cDate: any) {
-      const month = cDate.toLocaleString('default', { month: '2-digit' });   
+      const month = cDate.toLocaleString('default', { month: '2-digit' });
       this.userService.getTransactionsByMonth(month).subscribe({
         next: (response) => {
           if (response.data) {
@@ -61,7 +61,7 @@ export class TableComponent {
             // console.log(this.rawTransactions);
             if (this.tab === "1") {
               const { startOfWeek, endOfWeek } = this.getWeekRange(cDate);
-    
+
               this.transactions = this.transactions.filter((t: any) => {
                 const created = new Date(t.createdAt);
                 return created >= startOfWeek && created <= endOfWeek;
@@ -74,7 +74,7 @@ export class TableComponent {
       });
     }
 
-    getTransactions() {   
+    getTransactions() {
       this.userService.getTransactions().subscribe({
         next: (response) => {
           if (response.data) {
@@ -92,11 +92,11 @@ export class TableComponent {
       const start = new Date(date);
       start.setDate(start.getDate() - start.getDay()); // Sunday
       start.setHours(0, 0, 0, 0);
-    
+
       const end = new Date(start);
       end.setDate(end.getDate() + 6); // Saturday
       end.setHours(23, 59, 59, 999);
-    
+
       return { startOfWeek: start, endOfWeek: end };
     }
 
@@ -105,25 +105,25 @@ export class TableComponent {
       const dayOfYear = Math.floor(
         (date.getTime() - firstDayOfYear.getTime()) / (1000 * 60 * 60 * 24)
       );
-    
+
       const janFirstDay = firstDayOfYear.getDay(); // 0 = Sun
       const adjustedDay = dayOfYear + janFirstDay;
-    
+
       return Math.floor(adjustedDay / 7) + 1;
     };
-    
+
 
     getBadgeSeverity(transaction: any) {
       return transaction.type === 'income' ? 'info' : 'warn';
     }
-  
+
     rowClass(transaction: any) {
       return transaction.type === 'income' ? 'income-row' : 'expense-row';
     }
-  
+
     rowStyle(transaction: any) {
       if (transaction.type === 'income') {
-        return { backgroundColor: '#d4edda', color: '#155724' }; 
+        return { backgroundColor: '#d4edda', color: '#155724' };
       } else {
         return { backgroundColor: '#f8d7da', color: '#721c24' };
       }
@@ -147,46 +147,46 @@ export class TableComponent {
     dashboard(){
       this.router.navigate(['/dashboard'], { queryParams: { table: false } });
     }
-    
+
     initChart() {
       const documentStyle = getComputedStyle(document.documentElement);
       const textColor = documentStyle.getPropertyValue('--p-text-color');
       const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
       const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
-    
+
       const grouped: { [month: string]: { income: number; expense: number } } = {};
-    
+
       if (!this.rawTransactions || !this.rawTransactions.income || !this.rawTransactions.expense) return;
-    
+
       const allTransactions = [...this.rawTransactions.income, ...this.rawTransactions.expense];
-    
+
       const now = new Date();
       const currentYear = now.getFullYear();
       const currentMonth = now.getMonth(); // 0-indexed
-    
+
       // Init all months up to current month
       for (let i = 0; i <= currentMonth; i++) {
         const date = new Date(currentYear, i, 1);
         const monthKey = date.toLocaleString('default', { month: 'short' });
         grouped[monthKey] = { income: 0, expense: 0 };
       }
-    
+
       // Fill data
       allTransactions.forEach((t: any) => {
         const date = new Date(t.createdAt);
         const monthKey = date.toLocaleString('default', { month: 'short' });
-    
+
         if (!grouped[monthKey]) {
           grouped[monthKey] = { income: 0, expense: 0 };
         }
-    
+
         grouped[monthKey][t.type as 'income' | 'expense'] += t.amount;
       });
-    
+
       const labels = Object.keys(grouped);
       const incomeData = labels.map(label => grouped[label].income);
       const expenseData = labels.map(label => grouped[label].expense);
-    
+
       this.chartData = {
         labels,
         datasets: [
@@ -204,7 +204,7 @@ export class TableComponent {
           }
         ]
       };
-    
+
       this.options = {
         maintainAspectRatio: false,
         aspectRatio: 0.8,
@@ -242,8 +242,8 @@ export class TableComponent {
           }
         }
       };
-    
+
       this.cd.markForCheck();
     }
-    
+
 }

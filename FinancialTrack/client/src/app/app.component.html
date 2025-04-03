@@ -5,15 +5,21 @@
   <div class="card">
     <p-menubar [model]="items"  class="static-menubar">
       <ng-template #start>
-        <h2 class="financial-heading">FINANCIAL TRACKER</h2>    
+        <h2 class="financial-heading">FINANCIAL TRACKER</h2>
       </ng-template>
       <ng-template #end>
           <div class="flex items-center gap-2">
+            <p-button
+            label="Budget"
+            icon="pi pi-wallet"
+            (onClick)="navigateToBudget()"
+            styleClass="p-button-text"
+          ></p-button>
             <p-button (onClick)="toggle($event)"><i class="pi pi-user" style="font-size: 1.5rem"></i></p-button>
             <p-popover #op>
                 <div class="flex flex-col gap-4">
                     <div>
-                        <p>Welcome {{userData.username}}! </p>
+                        <p>Welcome {{userData?.username}}! </p>
                     </div>
                     <div class="logout-container">
                       <p-button
@@ -134,7 +140,7 @@
             <p class="m-0">No income on this date.</p>
           </ng-template>
         </p-panel>
-  
+
         <div class="button-wrapper">
           <p-button label="See all transactions" severity="secondary" (onClick)="getTransactionsBy()"/>
           <p-splitbutton label="Actions" [model]="actions" />
@@ -150,7 +156,7 @@
           [disabled]="true"
         />
         <label for="in_label">Date</label>
-  
+
         <p-panel  header="Weekly:" [toggleable]="true">
           <p class="m-0">Total Income: ${{ weeklyTotalIncome.toFixed(2) }}</p>
           <p class="m-0">Total Expense: ${{ weeklyTotalExpense.toFixed(2) }}</p>
@@ -218,9 +224,9 @@
             <p class="m-0">No income on this date.</p>
           </ng-template>
         </p-panel>
-  
+
         <div class="button-wrapper">
-          <p-button label="See all transactions" severity="secondary" (onClick)="getTransactionsBy()" />
+          <p-button label="See all transactions" severity="secondary" (onClick)="getTransactionsBy()"/>
           <p-splitbutton label="Actions" [model]="actions" />
         </div>
       </p-floatlabel>
@@ -250,7 +256,7 @@
               autocomplete="off"
             />
           </div>
-  
+
           <div class="flex items-center gap-4 input">
             <label for="amount" class="font-semibold w-24 text-right lbl"
               >Amount:</label
@@ -263,11 +269,10 @@
               autocomplete="off"
             />
           </div>
-  
+
           <div class="flex items-center gap-4 input">
             <label for="tag" class="font-semibold w-24 text-right lbl"
-              >Tag:</label
-            >
+              >Tag:</label>
             <input
               pInputText
               id="tag"
@@ -276,7 +281,7 @@
               autocomplete="off"
             />
           </div>
-  
+
           <div class="flex items-center gap-4 input">
             <label for="type" class="font-semibold w-24 text-right lbl"
               >Type:</label
@@ -293,7 +298,7 @@
             </p-dropdown>
           </div>
         </div>
-  
+
         <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
           <p-button
             class="btn"
@@ -323,7 +328,7 @@
         <div class="flex flex-col gap-4 pt-2 dialogContent">
           <p>{{errorMsg}}</p>
         </div>
-  
+
         <div class="flex justify-end gap-3 pt-4 pb-2 bottomDialog">
           <p-button
             class="btn"
@@ -339,6 +344,18 @@
 <div class="table" *ngIf="table">
   <app-table></app-table>
 </div>
+
+<p-dialog
+    header="Budget Tracker"
+    [(visible)]="showBudget"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+    [draggable]="false"
+    [resizable]="false"
+>
+    <app-budget (closeEvent)="showBudget = false"></app-budget>
+</p-dialog>
+
 <p-panel class="foot">
   <p class="m-0">
       Financial Tracker © 2025 Group-10, LE/EECS 3311 N W25

@@ -1,0 +1,220 @@
+.budget-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.budget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #4096ff;
+}
+
+.budget-header h2 {
+  color: #4096ff;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.date-display {
+  padding: 0.5rem 1rem;
+  background-color: #4096ff;
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.expense-section h3,
+.add-expense-section h3,
+.summary-section h3 {
+  color: #4096ff;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.add-expense-section {
+  margin-bottom: 2rem;
+}
+
+.add-expense-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: #f0f7ff;
+  border-radius: 8px;
+}
+
+.category-dropdown, .amount-input {
+  width: 100%;
+}
+
+/* Customize dropdown */
+:host ::ng-deep .p-dropdown {
+  width: 100%;
+  border: 1px solid #4096ff;
+  border-radius: 6px;
+}
+
+/* Customize input number */
+:host ::ng-deep .p-inputnumber {
+  width: 100%;
+}
+
+:host ::ng-deep .p-inputnumber .p-inputtext {
+  width: 100%;
+  border: 1px solid #4096ff;
+  border-radius: 6px;
+}
+
+.add-button {
+  height: 100%;
+  background-color: #4096ff;
+  border-color: #4096ff;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.add-button:hover {
+  background-color: #1677ff;
+  border-color: #1677ff;
+}
+
+/* Budget List Styles */
+.expense-table {
+  margin: 1rem 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.budget-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.budget-item-header {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #4096ff;
+  color: white;
+  font-weight: bold;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.budget-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  transition: background-color 0.2s;
+}
+
+.budget-item:nth-child(even) {
+  background-color: #f0f7ff;
+}
+
+.budget-item:hover {
+  background-color: #e0f2fe;
+}
+
+.category-label, .category-name {
+  flex: 2;
+}
+
+.amount-label, .budget-amount {
+  flex: 1;
+  text-align: right;
+}
+
+.action-label {
+  width: 50px;
+}
+
+.category-name {
+  color: #334155;
+}
+
+.budget-amount {
+  color: #4096ff;
+  font-weight: 500;
+}
+
+.delete-btn {
+  width: 50px;
+  color: #ef4444 !important;
+}
+
+.empty-message {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem;
+  font-style: italic;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #e2e8f0;
+}
+
+.summary-section {
+  margin-top: 2rem;
+  background-color: #f0f7ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #4096ff;
+}
+
+.summary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.summary-label {
+  color: #4096ff;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.total-amount {
+  color: #4096ff;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.total-expense {
+  color: #ef4444;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .add-expense-form {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

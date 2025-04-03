@@ -22,7 +22,11 @@ BudgetRoute.get("/", async (req: Request, res: Response) => {
 
     // Get the transactions
     const budgets = await Budget.getAllBudgets(userId);
-    res.status(201).json({ data: budgets, error: null });
+    const thisMonth = new Date().getMonth();
+    const filtered = budgets.filter(
+      (b) => new Date(b.createdAt).getMonth() === thisMonth
+    );
+    res.status(201).json({ data: filtered, error: null });
     return;
   } catch (error) {
     res.status(500).json({ data: [], error: "Internal server error" });
