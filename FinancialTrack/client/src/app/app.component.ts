@@ -138,6 +138,10 @@ export class AppComponent implements OnInit {
   errorMsg: any;
   dbTransactions: { income: any[]; expense: any[] };
   table = false;
+  budgets: any;
+  totalBudget: any;
+  remainingBalance: any;
+  styleReady = false;
 
   constructor(
     private userService: UserService,
@@ -178,18 +182,58 @@ export class AppComponent implements OnInit {
     } else if (this.router.url.includes('dashboard')) {
       this.router.navigate(['/login']);
     }
+    
+    this.getColor();
+  }
 
-    this.budgetService.budgetButtonColor$.subscribe(color => {
-      if(color) {
-        this.budgetButtonStyle = {
-          'background-color': color,
-          'border-color': color,
-          'color' : 'black'
-        };
-      } else {
-        this.budgetButtonStyle = {};
+  getColor(){
+    this.budgetService.getAllBudgets().subscribe(response => {
+      if (!response.error) {
+        this.budgets = response.data;
+        console.log(this.budgets);
+        
+        this.totalBudget = this.budgets.reduce((sum: any, b: { amount: any; }) => sum + b.amount, 0);
+        this.remainingBalance = this.totalBudget - this.monthlyTotalExpense;
+        this.updateBudgetButtonColor();
       }
     });
+  }
+
+  updateBudgetButtonColor() {
+
+    setTimeout(() => {
+      const budgetRatio = this.totalBudget > 0 ? (this.monthlyTotalExpense / this.totalBudget) : -1;
+
+      console.log(budgetRatio);
+      
+      let buttonColor = '';
+
+      if(budgetRatio >= 0) {
+        if(budgetRatio < 0.5) {
+          buttonColor = '#4caf50';
+        } else if(budgetRatio >= 0.5 && budgetRatio <= 0.75) {
+          buttonColor = '#ffc107';
+        } else if(budgetRatio > 0.75) {
+          buttonColor = '#f44336';
+        }
+
+        this.budgetButtonStyle = {
+          'background-color': buttonColor,
+          'border-color': buttonColor,
+          'color' : 'black'
+        };
+
+        
+        this.styleReady = true;
+
+        console.log(this.budgetButtonStyle);
+        
+      } else {
+        this.budgetButtonStyle = {};
+        this.styleReady = false;
+      }
+    }, 100)
+    
   }
 
   // Highlight: Updated logout method to use AuthService
@@ -226,6 +270,11 @@ export class AppComponent implements OnInit {
     this.budgetService.updateExpensesTotal(this.monthlyTotalExpense);
   }
 
+  get getStyle(){
+    console.log(this.budgetButtonStyle);
+    
+    return this.budgetButtonStyle;
+  }
 
   onBudgetClose() {
     this.showBudget = false;
@@ -396,6 +445,7 @@ export class AppComponent implements OnInit {
     }
     this.transactionForm.reset();
     this.visible = false;
+    window.location.reload();
   }
 
   // All getters remain exactly the same

@@ -99,7 +99,8 @@ p-button {
 }
 
 body, .main {
-  padding-top: 4.5rem;
+  padding-top: 6rem;
+  margin-bottom: 7rem;
 }
 
 .c {

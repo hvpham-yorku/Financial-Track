@@ -165,4 +165,8 @@ export class BudgetComponent implements OnInit {
   private formatMonthYear(date: Date): string {
     return date.toISOString().slice(0, 7);
   }
+
+  Save(){
+    window.location.reload();
+  }
 }

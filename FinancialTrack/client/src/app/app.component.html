@@ -10,12 +10,22 @@
       <ng-template #end>
           <div class="flex items-center gap-2">
             <p-button
-            label="Budget"
-            icon="pi pi-wallet"
-            (onClick)="navigateToBudget()"
-            styleClass="p-button-text"
-            [style] = "budgetButtonStyle"
-          ></p-button>
+              *ngIf="styleReady"
+              label="Budget"
+              icon="pi pi-wallet"
+              (onClick)="navigateToBudget()"
+              styleClass="p-button-text"
+              [style]="budgetButtonStyle"
+            ></p-button>  
+            <p-button
+              *ngIf="!styleReady"
+              label="Budget"
+              icon="pi pi-wallet"
+              (onClick)="navigateToBudget()"
+              styleClass="p-button-text"
+              [style]="budgetButtonStyle"
+            ></p-button>
+
             <p-button (onClick)="toggle($event)"><i class="pi pi-user" style="font-size: 1.5rem"></i></p-button>
             <p-popover #op>
                 <div class="flex flex-col gap-4">
