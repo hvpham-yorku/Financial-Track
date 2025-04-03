@@ -22,10 +22,8 @@ BudgetRoute.get("/", async (req: Request, res: Response) => {
 
     // Get the transactions
     const budgets = await Budget.getAllBudgets(userId);
-    const thisMonth = new Date().getMonth();
-    const filtered = budgets.filter(
-      (b) => new Date(b.createdAt).getMonth() === thisMonth
-    );
+    const now = dateToMonthYear(new Date());
+    const filtered = budgets.filter((b) => b.monthYear === now);
     res.status(201).json({ data: filtered, error: null });
     return;
   } catch (error) {
@@ -60,7 +58,6 @@ BudgetRoute.post("/", async (req: Request, res: Response) => {
   try {
     const userId = req.user.id as number;
     const payload = req.body as InsertBudget;
-    console.log(payload);
     // Check if exists
     const user = await User.findByPk(userId);
     if (!user) {
@@ -70,7 +67,7 @@ BudgetRoute.post("/", async (req: Request, res: Response) => {
 
     const t = await Budget.create({
       ...payload,
-      monthYear: dateToMonthYear(new Date(payload.monthYear)),
+      monthYear: payload.monthYear,
       userId,
     });
     res.status(200).json({ data: t, error: null });
@@ -96,7 +93,7 @@ BudgetRoute.patch("/edit", async (req: Request, res: Response) => {
       ? await Budget.update(
           {
             ...payload,
-            monthYear: dateToMonthYear(new Date(payload.monthYear)),
+            monthYear: payload.monthYear,
             updated_at: new Date(),
           },
           { where: { id: payload.id, userId } }

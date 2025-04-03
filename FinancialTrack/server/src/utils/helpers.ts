@@ -1,3 +1,3 @@
 export const dateToMonthYear = (date: Date) => {
-  return `${date.getMonth() + 1}/${date.getFullYear()}`;
+  return date.toISOString().slice(0, 7);
 };

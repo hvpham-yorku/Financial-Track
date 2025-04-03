@@ -20,19 +20,19 @@ import { randomBytes } from "crypto";
     {
       amount: 5000.0,
       note: "Good month!",
-      monthYear: "03/2025",
+      monthYear: "2025-03",
       userId: 1,
     },
     {
       amount: 4500.0,
       note: "Okay month!",
-      monthYear: "02/2025",
+      monthYear: "2025-02",
       userId: 1,
     },
     {
       amount: 2500.0,
       note: "Bad month!",
-      monthYear: "03/2025",
+      monthYear: "2025-03",
       userId: 2,
     },
   ]);
