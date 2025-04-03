@@ -44,3 +44,17 @@
 ---
 
 ## Practices
+
+### Practices Used
+The team's communication was excellent, the work was well divided among members, and participation in the meetings was strong, ensuring smooth collaboration throughout the sprint. We used the Discord scheduling system well, which helped coordinate meetings effectively and keep everyone on track.
+
+### New Practices
+None. This sprint was the end, so no new practices were introduced.
+
+### Harmful Practices
+We improved by using fewer branches in GitHub, which helped reduce confusion. However, since the last sprint, there were still too many branches and they were not organized properly, which led to some confusion about where to focus.
+
+---
+
+## Experience
+Overall, the sprint went well. We effectively used the Discord scheduling system to keep things organized. The transition to using fewer GitHub branches helped streamline work, although the lack of organization in some branches caused a bit of confusion at times. These issues were manageable, and we were able to adapt and make progress, ensuring that most tasks were completed on time.
