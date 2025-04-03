@@ -16,14 +16,44 @@ Managing personal finances can be overwhelming, especially for individuals with 
 ### 1. Budget Management
 
 Track your income and expenses, and create budgets to manage your finances effectively.
+Custom Budget Categories:
+   - Create personalized categories (e.g., Food, Entertainment)
+   - Set monthly allocation amounts (e.g., $500 for Entertainment)
 
 ### 2. Transaction Tracking
 
 Log and categorize transactions to gain insights into your spending habits.
+   - Smart Transaction Logging
+      Detailed entry form with:
+         Title - (Pizza)
+         Amount - (100)
+         Tag - (Food)
+         Type (Income/Expense)
+         Data tracking
 
 ### 3. User Authentication
 
 Securely log in and manage your account with authentication features.
+Login System:
+   - Username/Password authentication
+   - Secure password field (masked input)
+Registration Flow:
+   - Password confirmation
+   - Success messaging ("Registration successful")
+
+### 4. UI, Navigation, and Calender Integregation
+
+Visual time-based financial management.
+Interactive Calendar:
+   - Weekly view with financial data
+   - Month navigation (April 2025 shown)
+   - Week numbering system (Wk 13-17)
+Intuitive user experience:
+   - Dual View Mode:
+       Toggle between Monthly/Weekly perspectives
+   - Action Menu:
+      "See all transactions" option
+      Contextual actions
 
 ## Installation
 
