@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { User } from '../models/user.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,13 +12,15 @@ export class UserService {
   public tab: any;
   public selectedWeeklyDate:any;
   public selectedMonthlyDate:any;
-  constructor(private http: HttpClient) {}
 
-  addUser(user: User): Observable<User> {
-    console.warn(
-      'This method is deprecated. Use auth/register endpoint instead.'
-    );
-    return this.http.post<User>(`${this.baseUrl}/users`, user);
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
   }
 
   addTransaction(formData?: any) {
