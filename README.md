@@ -20,6 +20,12 @@ Custom Budget Categories:
    - Create personalized categories (e.g., Food, Entertainment)
    - Set monthly allocation amounts (e.g., $500 for Entertainment)
 
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/budget.png)
+
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/Byellow.png)
+
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/Bgreen.png)
+
 ### 2. Transaction Tracking
 
 Log and categorize transactions to gain insights into your spending habits.
@@ -30,6 +36,8 @@ Log and categorize transactions to gain insights into your spending habits.
          Tag - (Food)
          Type (Income/Expense)
          Data tracking
+     
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/trans.png)
 
 ### 3. User Authentication
 
@@ -40,6 +48,13 @@ Login System:
 Registration Flow:
    - Password confirmation
    - Success messaging ("Registration successful")
+
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/register.png)
+
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/login.png)
+
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/logout.png)
+
 
 ### 4. UI, Navigation, and Calender Integregation
 
@@ -54,6 +69,12 @@ Intuitive user experience:
    - Action Menu:
       "See all transactions" option
       Contextual actions
+
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/month.png)
+
+![Project Logo](https://github.com/hvpham-yorku/Financial-Track/blob/sprint2/doc/image/week.png)
+
+
 
 ## Installation
 
