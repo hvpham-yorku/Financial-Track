@@ -1,0 +1,61 @@
+<div class="budget-container">
+  <div class="budget-header">
+    <h2>Budget Tracker</h2>
+  </div>
+
+  <div class="add-expense-section">
+    <h3>Add New Budget Category</h3>
+    <div class="add-expense-form">
+      <p-dropdown [options]="expenseCategories" [(ngModel)]="newExpenseCategory"
+                  optionLabel="name" placeholder="Select category" class="category-dropdown"></p-dropdown>
+      <p-inputNumber [(ngModel)]="newExpenseAmount" mode="currency" currency="USD"
+                    locale="en-US" placeholder="$0.00" class="amount-input"></p-inputNumber>
+      <button pButton icon="pi pi-plus" label="Add Budget" class="add-button"
+              (click)="addBudget(newExpenseCategory?.name, newExpenseAmount || 0)"
+              [disabled]="!newExpenseCategory || !newExpenseAmount"></button>
+    </div>
+  </div>
+
+  <div class="expense-section">
+    <h3>Budget Categories</h3>
+    <div class="expense-table" *ngIf="budgets.length > 0; else emptyState">
+      <div class="budget-list">
+        <div class="budget-item-header">
+          <span class="category-label">Category</span>
+          <span class="amount-label">Amount</span>
+          <span class="action-label"></span>
+        </div>
+        <div class="budget-item" *ngFor="let budget of budgets">
+          <span class="category-name">{{ budget.note }}</span>
+          <span class="budget-amount">{{ budget.amount | currency:'USD':'symbol':'1.2-2' }}</span>
+          <button pButton icon="pi pi-trash" class="p-button-text p-button-sm delete-btn"
+                  (click)="deleteBudget(budget.id)"></button>
+        </div>
+      </div>
+    </div>
+    <ng-template #emptyState>
+      <div class="empty-message">No budget categories added yet</div>
+    </ng-template>
+  </div>
+
+  <div class="summary-section">
+    <h3>Budget Summary</h3>
+    <div class="summary-details">
+      <div class="summary-row">
+        <span class="summary-label">Total Budget:</span>
+        <span class="total-amount">${{ totalBudget.toFixed(2) }}</span>
+      </div>
+      <div class="summary-row" *ngIf="showExpenses">
+        <span class="summary-label">Total Expense:</span>
+        <span class="total-expense">${{ totalExpenses.toFixed(2) }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="btn">
+  <p-button
+          label="Save"
+          (click)="Save()"
+        >
+        </p-button>
+</div>

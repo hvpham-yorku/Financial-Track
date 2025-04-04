@@ -1,3 +1,4 @@
+import Budget from "../models/Budget";
 import Transaction from "../models/Transaction";
 import User from "../models/User";
 import { randomBytes } from "crypto";
@@ -7,14 +8,34 @@ import { randomBytes } from "crypto";
   //const generateRandomPassword = () => randomBytes(8).toString("hex");
 
   const users = [
-    { username: "test", password: "12345", budget: 1000.0 },
+    { username: "test", password: "12345" },
     {
       username: "mathieu",
       password: "woensaksndqnwd129wekjn21e90",
-      budget: 3000.0,
     },
   ];
   await User.bulkCreate(users);
+
+  await Budget.bulkCreate([
+    {
+      amount: 5000.0,
+      note: "Good month!",
+      monthYear: "2025-03",
+      userId: 1,
+    },
+    {
+      amount: 4500.0,
+      note: "Okay month!",
+      monthYear: "2025-02",
+      userId: 1,
+    },
+    {
+      amount: 2500.0,
+      note: "Bad month!",
+      monthYear: "2025-03",
+      userId: 2,
+    },
+  ]);
 
   const transactions = [
     {

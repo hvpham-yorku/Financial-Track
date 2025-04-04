@@ -2,20 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { User } from '../models/user.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private baseUrl = 'http://localhost:3000';
+  public tab: any;
+  public selectedWeeklyDate:any;
+  public selectedMonthlyDate:any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  addUser(user: User): Observable<User> {
-    console.warn(
-      'This method is deprecated. Use auth/register endpoint instead.'
-    );
-    return this.http.post<User>(`${this.baseUrl}/users`, user);
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
   }
 
   addTransaction(formData?: any) {
@@ -33,12 +38,11 @@ export class UserService {
 
   updateTransaction(formData: any) {
     const token = localStorage.getItem('jwt_token');
-  
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     });
-  
+
     return this.http.patch<any>(`${this.baseUrl}/transactions/edit`, formData, {
       headers,
     });
@@ -46,17 +50,15 @@ export class UserService {
 
   deleteTransaction(id: number) {
     const token = localStorage.getItem('jwt_token');
-  
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     });
-  
     return this.http.delete<any>(`${this.baseUrl}/transactions/delete`, {
       headers,
       body: { id },
     });
-  }  
+  }
 
   getTransactions() {
     const token = localStorage.getItem('jwt_token');
@@ -65,6 +67,28 @@ export class UserService {
       Authorization: `Bearer ${token}`,
     });
     return this.http.get<any>(`${this.baseUrl}/transactions/all-split`, {
+      headers,
+    });
+  }
+
+  getTransactionsByMonth(date : any) {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<any>(`${this.baseUrl}/transactions/month/${date}`, {
+      headers,
+    });
+  }
+
+  getTransactionsByWeek(date : any) {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<any>(`${this.baseUrl}/transactions/week/${date}`, {
       headers,
     });
   }

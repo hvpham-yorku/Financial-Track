@@ -1,0 +1,57 @@
+<div class="card main">
+    <ng-container *ngIf="tab == '0'">
+      <h1 class="header">TRANSACTIONS</h1>  
+      <div class="card wid">
+        <p-chart type="bar" [data]="chartData" [options]="options" class="h-[30rem]" />
+      </div>      
+      <div class="card flex justify-center month">
+        <h3>Month: </h3>
+        <p-datepicker [(ngModel)]="date" 
+                      view="month" 
+                      dateFormat="mm" 
+                      [readonlyInput]="true" 
+                      [monthNavigator]="true" 
+                      (onSelect)="onDateSelect($event)">
+        </p-datepicker>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="tab != '0'">
+      <h1 class="header">TRANSACTIONS</h1>  
+      <div class="card flex justify-center month">
+        <h3>Week: </h3>
+        <p-inputnumber inputId="integeronly" [(ngModel)]="week" [disabled]="true"/>
+      </div>
+    </ng-container>
+    <p-table [value]="transactions" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Title</th>
+          <th>Amount</th>
+          <th>Tag</th>
+          <th>Type</th>
+          <th pSortableColumn="createdAt" style="width:20%">Date Created
+            <p-sortIcon field="code" />
+          </th>
+        </tr>
+      </ng-template>
+  
+      <ng-template pTemplate="body" let-transaction>
+        <tr [ngClass]="rowClass(transaction)" [ngStyle]="rowStyle(transaction)">
+          <td>{{ transaction.title }}</td>
+          <td>{{ transaction.amount }}</td>
+          <td>{{ transaction.tag }}</td>
+          <td>
+            <p-badge [value]="transaction.type" [severity]="getBadgeSeverity(transaction)" />
+          </td>
+          <td>{{ transaction.createdAt | date: 'dd' }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <ng-container *ngIf="!transactions || transactions.length === 0">
+      <p>No Data for {{monthName}}</p>
+    </ng-container>
+    <div class="button-wrapper btn">
+      <p-button label="Return" severity="danger" (onClick)="dashboard()" />
+    </div>
+</div>
+  

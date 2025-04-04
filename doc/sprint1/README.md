@@ -1,6 +1,6 @@
-## EECS3311 Project - Sprint 1
+# EECS3311 Project - Sprint 1
 
-### Team Information
+## Team Information
 
 - Course: EECS3311
 - Semester: Winter 2025
@@ -21,13 +21,13 @@ All documentation related to Sprint 1 can be found in this directory. Please ref
 
 ### Team Members
 
-| Full Name       | Student ID | Email                |
-| --------------- | ---------- | -------------------- |
-| Kwangmin Ryu    | 217233321  | danielry@my.yorku.ca |
-| Jay Patel       | 217548207  | jaym2001@my.yorku.ca |
-| Yashvir Singh   | 217637711  | yash0407@my.yorku.ca |
-| Mathieu Johnson | 220794343  | matj10@my.yorku.ca   |
-| Daniel Prilipko | 214286710  | prilipko@my.yorku.ca |
+| Full Name       | Student ID | Email                  |
+| --------------- | ---------- | ---------------------- |
+| Kwangmin Ryu    | 217233321  | <danielry@my.yorku.ca> |
+| Jay Patel       | 217548207  | <jaym2001@my.yorku.ca> |
+| Yashvir Singh   | 217637711  | <yash0407@my.yorku.ca> |
+| Mathieu Johnson | 220794343  | <matj10@my.yorku.ca>   |
+| Daniel Prilipko | 214286710  | <prilipko@my.yorku.ca> |
 
 ## Project Overview
 
@@ -59,13 +59,13 @@ Please ensure you have the following installed:
 - [Git](https://git-scm.com/) - Download and install
 - [Angular CLI](https://angular.dev/tools/cli/setup-local)
 
-```
+```bash
 npm install -g @angular/cli
 ```
 
 _To set up the project locally, follow these steps:_
 
-1. Clone the repository
+### **Clone the repository**
 
 ```bash
    git clone https://github.com/hvpham-yorku/Financial-Track.git
@@ -74,7 +74,7 @@ _To set up the project locally, follow these steps:_
 
 ### Client
 
-2. **Install dependencies:**
+#### **Install Client Dependencies:**
 
 ```bash
    cd FinancialTrack
@@ -82,17 +82,17 @@ _To set up the project locally, follow these steps:_
    npm install
 ```
 
-3. **Run the Application**
+#### **Run the Client Application**
 
 ```bash
    ng serve
 ```
 
-The application should now be accessible at http://localhost:4200/.
+The application should now be accessible at <http://localhost:4200/>.
 
 ### Server
 
-2. **Install dependencies:**
+#### **Install Server Dependencies**
 
 ```bash
    cd FinancialTrack
@@ -100,14 +100,14 @@ The application should now be accessible at http://localhost:4200/.
    npm install
 ```
 
-3. **Run the Application**
+#### **Run the Server**
 
 ```bash
    npm run db-seed # Add mock data to the database
    npm run dev
 ```
 
-The application should now be accessible at http://localhost:3000/.
+The application should now be accessible at <http://localhost:3000/>.
 
 ## Contribution to the Project
 
